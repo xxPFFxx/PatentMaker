@@ -8,9 +8,14 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtGui import QTransform, QPixmap, QImage
 
 
 class Ui_MainWindow(object):
+    def __init__(self):
+        self.image_raw_main = QImage('a.png')
+        self.angle = 0
+
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1340, 900)
@@ -335,6 +340,10 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+        self.button_right.clicked.connect(self.turn_right)
+        self.button_left.clicked.connect(self.turn_left)
+
+
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "PatentMaker 1.0"))
@@ -374,6 +383,17 @@ class Ui_MainWindow(object):
         self.actionHow_to_use.setText(_translate("MainWindow", "How to use?"))
         self.actionMade_by.setText(_translate("MainWindow", "Creators"))
         self.actionPogU.setText(_translate("MainWindow", "PogU"))
+
+    def turn_right(self):
+        self.angle += 90
+        t = QTransform().rotate(self.angle)
+        self.label_raw_main.setPixmap(QPixmap(self.image_raw_main).transformed(t))
+
+    def turn_left(self):
+        self.angle -= 90
+        t = QTransform().rotate(self.angle)
+        self.label_raw_main.setPixmap(QPixmap(self.image_raw_main).transformed(t))
+
 
 
 if __name__ == "__main__":
