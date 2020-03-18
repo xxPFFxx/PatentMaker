@@ -1,4 +1,4 @@
-def sum(a,b):
-    return a + b
-def print_hello():
-    print('Hello')
+class Game():
+    def __init__(self):
+        pass
+        # TODO Подумать какие должны быть поля. Например: Дата(Название), виды доп.сырья, правила, сложность и т.д.
