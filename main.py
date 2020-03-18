@@ -13,7 +13,7 @@ from PyQt5.QtGui import QTransform, QPixmap, QImage
 from ClickableLabel import ClickableLabel
 from Rules import Window_rules
 
-class Ui_MainWindow():
+class  Ui_MainWindow():
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1340, 900)
