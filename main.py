@@ -6,17 +6,14 @@
 #
 # WARNING! All changes made in this file will be lost!
 
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QPushButton
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import QTransform, QPixmap, QImage
 from ClickableLabel import ClickableLabel
+from Rules import Window_rules
 
-
-class Ui_MainWindow(object):
-    def __init__(self):
-        self.image_raw_main = QImage('a.png')
-        self.angle = 0
-
+class Ui_MainWindow():
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1340, 900)
@@ -50,7 +47,7 @@ class Ui_MainWindow(object):
         self.button_clear.setGeometry(QtCore.QRect(10, 210, 251, 71))
         self.button_clear.setObjectName("button_clear")
         self.button_undo = QtWidgets.QPushButton(self.frame_edit)
-        self.button_undo.setGeometry(QtCore.QRect(10, 20, 251, 71))
+        self.button_undo.setGeometry(QtCore.QRect(10, 30, 251, 71))
         self.button_undo.setObjectName("button_undo")
         self.button_redo = QtWidgets.QPushButton(self.frame_edit)
         self.button_redo.setGeometry(QtCore.QRect(10, 120, 251, 71))
@@ -109,7 +106,7 @@ class Ui_MainWindow(object):
         self.label_difficulty.setAlignment(QtCore.Qt.AlignCenter)
         self.label_difficulty.setObjectName("label_difficulty")
         self.frame_progress = QtWidgets.QFrame(self.centralwidget)
-        self.frame_progress.setGeometry(QtCore.QRect(60, 230, 191, 131))
+        self.frame_progress.setGeometry(QtCore.QRect(60, 280, 191, 131))
         self.frame_progress.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_progress.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_progress.setObjectName("frame_progress")
@@ -341,11 +338,13 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+        # Весь новый код только ниже! -------------------------------
+
         self.button_right.clicked.connect(self.turn_right)
         self.button_left.clicked.connect(self.turn_left)
         self.label_A.clicked.connect(lambda: self.update_raw_main_image('a.png'))
         # Когда будут изображения, кроме А
-        # self.label_B.clicked.connect(lambda : self.update_raw_main_image('b.png'))
+        self.label_B.clicked.connect(lambda : self.update_raw_main_image('patent.png'))
         # self.label_C.clicked.connect(lambda : self.update_raw_main_image('c.png'))
         # self.label_D.clicked.connect(lambda : self.update_raw_main_image('d.png'))
         # self.label_E.clicked.connect(lambda : self.update_raw_main_image('e.png'))
@@ -356,14 +355,26 @@ class Ui_MainWindow(object):
         # self.label_N4.clicked.connect(lambda : self.update_raw_main_image('n4.png'))
         # self.label_N5.clicked.connect(lambda : self.update_raw_main_image('n5.png'))
         # self.label_N6.clicked.connect(lambda : self.update_raw_main_image('n6.png'))
+        self.button_rules.clicked.connect(self.show_window)
+
+        self.button_accept = QtWidgets.QPushButton(self.centralwidget)
+        self.button_accept.setGeometry(QtCore.QRect(55, 190, 201, 41))
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(14)
+        self.button_accept.setFont(font)
+        self.button_accept.setObjectName("button_accept")
+        self.button_accept.setText("Accept ✔")
+
+        self.button_accept.clicked.connect(self.change_patent)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "PatentMaker 1.0"))
         self.button_rules.setText(_translate("MainWindow", "Rules"))
         self.button_clear.setText(_translate("MainWindow", "Clear"))
-        self.button_undo.setText(_translate("MainWindow", "Undo"))
-        self.button_redo.setText(_translate("MainWindow", "Redo"))
+        self.button_undo.setText(_translate("MainWindow", "Undo ↶"))
+        self.button_redo.setText(_translate("MainWindow", "Redo ↷"))
         self.patentbox.setItemText(0, _translate("MainWindow", "Patent1"))
         self.patentbox.setItemText(1, _translate("MainWindow", "Patent2"))
         self.label_lvl.setText(_translate("MainWindow", "Required level"))
@@ -397,6 +408,11 @@ class Ui_MainWindow(object):
         self.actionMade_by.setText(_translate("MainWindow", "Creators"))
         self.actionPogU.setText(_translate("MainWindow", "PogU"))
 
+
+    def __init__(self):
+        self.image_raw_main = QImage('a.png')
+        self.angle = 0
+
     def turn_right(self):
         self.angle += 90
         t = QTransform().rotate(self.angle)
@@ -410,6 +426,20 @@ class Ui_MainWindow(object):
     def update_raw_main_image(self, path):
         self.image_raw_main = QImage(path)
         self.label_raw_main.setPixmap(QPixmap(self.image_raw_main))
+        self.angle = 0 # fix1
+
+    def show_window(self):
+        self.window = Window_rules() # file Rules.py
+        self.window.show()
+
+    def change_patent(self):
+        self.path_patent = self.patentbox.currentText() + '.png'
+        self.image_new_patent = QImage(self.path_patent)
+        self.patent.setPixmap(QPixmap(self.image_new_patent))
+
+        self.name_patent.setText(self.patentbox.currentText())
+        #пока что не обработано колесико для выбора желаемого уровня
+
 
 
 if __name__ == "__main__":
