@@ -14,7 +14,7 @@ from ClickableLabel import ClickableLabel
 from Rules import Window_rules
 
 
-class  Ui_MainWindow():
+class Ui_MainWindow():
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1340, 900)
@@ -341,11 +341,10 @@ class  Ui_MainWindow():
 
         # Весь новый код только ниже! -------------------------------
 
-        self.button_right.clicked.connect(self.turn_right)
-        self.button_left.clicked.connect(self.turn_left)
+        # Обновление выбранного сырья при нажатии
         self.label_A.clicked.connect(lambda: self.update_raw_main_image('a.png'))
         # Когда будут изображения, кроме А
-        self.label_B.clicked.connect(lambda : self.update_raw_main_image('patent.png'))
+        self.label_B.clicked.connect(lambda: self.update_raw_main_image('patent.png'))
         # self.label_C.clicked.connect(lambda : self.update_raw_main_image('c.png'))
         # self.label_D.clicked.connect(lambda : self.update_raw_main_image('d.png'))
         # self.label_E.clicked.connect(lambda : self.update_raw_main_image('e.png'))
@@ -356,8 +355,8 @@ class  Ui_MainWindow():
         # self.label_N4.clicked.connect(lambda : self.update_raw_main_image('n4.png'))
         # self.label_N5.clicked.connect(lambda : self.update_raw_main_image('n5.png'))
         # self.label_N6.clicked.connect(lambda : self.update_raw_main_image('n6.png'))
-        self.button_rules.clicked.connect(self.show_window)
 
+        # Добавление кнопки Accept вручную
         self.button_accept = QtWidgets.QPushButton(self.centralwidget)
         self.button_accept.setGeometry(QtCore.QRect(55, 190, 201, 41))
         font = QtGui.QFont()
@@ -367,6 +366,10 @@ class  Ui_MainWindow():
         self.button_accept.setObjectName("button_accept")
         self.button_accept.setText("Accept ✔")
 
+        # Настройка функций на нажатие кнопок
+        self.button_right.clicked.connect(self.turn_right)
+        self.button_left.clicked.connect(self.turn_left)
+        self.button_rules.clicked.connect(self.show_window_rules)
         self.button_accept.clicked.connect(self.change_patent)
 
     def retranslateUi(self, MainWindow):
@@ -409,38 +412,42 @@ class  Ui_MainWindow():
         self.actionMade_by.setText(_translate("MainWindow", "Creators"))
         self.actionPogU.setText(_translate("MainWindow", "PogU"))
 
-
     def __init__(self):
-        self.image_raw_main = QImage('a.png')
+        self.image_raw_main = QImage('a.png')  # Переменная для текущего изображения в выбранном сырье
         self.angle = 0
 
+    # Поворот сырья направо
     def turn_right(self):
         self.angle += 90
         t = QTransform().rotate(self.angle)
         self.label_raw_main.setPixmap(QPixmap(self.image_raw_main).transformed(t))
 
+    # Поворот сырья налево
     def turn_left(self):
         self.angle -= 90
         t = QTransform().rotate(self.angle)
         self.label_raw_main.setPixmap(QPixmap(self.image_raw_main).transformed(t))
 
+    # Обновление изображения выбранного сырья
     def update_raw_main_image(self, path):
         self.image_raw_main = QImage(path)
         self.label_raw_main.setPixmap(QPixmap(self.image_raw_main))
-        self.angle = 0 # fix1
+        self.angle = 0
 
-    def show_window(self):
-        self.window = Window_rules() # file Rules.py
+        # Показ окна правил
+
+    def show_window_rules(self):
+        self.window = Window_rules()  # file Rules.py
         self.window.show()
 
+    # Функционал кнопки Accept
     def change_patent(self):
         self.path_patent = self.patentbox.currentText() + '.png'
         self.image_new_patent = QImage(self.path_patent)
         self.patent.setPixmap(QPixmap(self.image_new_patent))
 
         self.name_patent.setText(self.patentbox.currentText())
-        #пока что не обработано колесико для выбора желаемого уровня
-
+        # пока что не обработано колесико для выбора желаемого уровня
 
 
 if __name__ == "__main__":

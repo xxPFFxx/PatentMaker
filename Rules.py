@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QWidget
 
+# Класс открывающихся правил при нажатии на кнопку Rules
 class Window_rules(QWidget):
     def __init__(self):
         super(Window_rules, self).__init__()
