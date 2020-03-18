@@ -12,6 +12,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import QTransform, QPixmap, QImage
 from ClickableLabel import ClickableLabel
 from Rules import Window_rules
+from Game import Game
 
 
 class Ui_MainWindow():
@@ -379,7 +380,7 @@ class Ui_MainWindow():
         self.button_clear.setText(_translate("MainWindow", "Clear"))
         self.button_undo.setText(_translate("MainWindow", "Undo ↶"))
         self.button_redo.setText(_translate("MainWindow", "Redo ↷"))
-        self.patentbox.setItemText(0, _translate("MainWindow", "Patent1"))
+        self.patentbox.setItemText(0, _translate("MainWindow", self.game1.name))
         self.patentbox.setItemText(1, _translate("MainWindow", "Patent2"))
         self.label_lvl.setText(_translate("MainWindow", "Required level"))
         self.name_patent.setText(_translate("MainWindow", "Training session 07.02.2020"))
@@ -416,6 +417,9 @@ class Ui_MainWindow():
         self.image_raw_main = QImage('a.png')  # Переменная для текущего изображения в выбранном сырье
         self.angle = 0
 
+        self.game1 = Game(1, 'Championat 28.02.2020', 'Hard')
+        self.data={self.game1.name:self.game1}
+
     # Поворот сырья направо
     def turn_right(self):
         self.angle += 90
@@ -434,19 +438,19 @@ class Ui_MainWindow():
         self.label_raw_main.setPixmap(QPixmap(self.image_raw_main))
         self.angle = 0
 
-        # Показ окна правил
-
+    # Показ окна правил
     def show_window_rules(self):
         self.window = Window_rules()  # file Rules.py
         self.window.show()
 
     # Функционал кнопки Accept
     def change_patent(self):
-        self.path_patent = self.patentbox.currentText() + '.png'
-        self.image_new_patent = QImage(self.path_patent)
-        self.patent.setPixmap(QPixmap(self.image_new_patent))
+        # self.path_patent = self.patentbox.currentText() + '.png'
 
-        self.name_patent.setText(self.patentbox.currentText())
+        self.current_game = self.data[self.patentbox.currentText()]
+        self.image_new_patent = QImage(self.current_game.path + '/patent.png')
+        self.patent.setPixmap(QPixmap(self.image_new_patent))
+        self.name_patent.setText(self.current_game.name)
         # пока что не обработано колесико для выбора желаемого уровня
 
 
