@@ -536,17 +536,25 @@ class DropLabel(QtWidgets.QLabel):
         else:
             event.ignore()
 
+
     def dropEvent(self, event):
         if event.mimeData().hasImage():
-            self.qpoint = str(event.pos())
-            self.pos = self.qpoint[20:len(self.qpoint) - 1]
-            self.x, self.y = self.pos.split(', ')
-            self.x, self.y = int(self.x), int(self.y)  # достали координаты drop из объекта PyQt5.QtCore.QPoint(x, y)
-            print("Координаты дропа:", self.x, self.y)
-            print(event.source().drag_start_position)
+            self.qpoint1 = str(event.pos())
+            self.pos1 = self.qpoint1[20:len(self.qpoint1) - 1]
+            self.x1, self.y1 = self.pos1.split(', ')
+            self.x1, self.y1 = int(self.x1), int(self.y1)  # достали координаты drop из объекта PyQt5.QtCore.QPoint(x, y)
+            print("Координаты дропа:", self.x1, self.y1)
+
+            self.qpoint2 = str(event.source().drag_start_position)
+            self.pos2 = self.qpoint2[20:len(self.qpoint2) - 1]
+            self.x2, self.y2 = self.pos2.split(', ')
+            self.x2, self.y2 = int(self.x2), int(self.y2)  # достали координаты drop из объекта PyQt5.QtCore.QPoint(x, y)
+            print("Координаты дропа:", self.x2, self.y2)
+
+
 
             self.new_raw = QtWidgets.QLabel(ui.centralwidget)
-            self.new_raw.setGeometry(QtCore.QRect(self.x + 310, self.y + 70 , 71, 81))
+            self.new_raw.setGeometry(QtCore.QRect(self.x1 + 310 - self.x2 + 5, self.y1 + 70 - self.y2 - 5 , 71, 81))
             self.new_raw.setPixmap(QtGui.QPixmap("a.png"))
             self.new_raw.setScaledContents(True)
             self.new_raw.show()
