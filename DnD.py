@@ -17,6 +17,7 @@ class DraggableLabel(QLabel):
             self.drag_start_position = event.pos()
 
     def mouseMoveEvent(self, event):
+        #перетягивание на левую кнопку мыши + установка минимальной длины для начала перетягивания (4 пикселя)
         if not (event.buttons() & Qt.LeftButton):
             return
         if (event.pos() - self.drag_start_position).manhattanLength() < QApplication.startDragDistance():
@@ -24,16 +25,20 @@ class DraggableLabel(QLabel):
 
         drag = QDrag(self)
 
+        #QMimeData() - класс для хранения данных любого типа во время перетягивания
         mimedata = QMimeData()
-        mimedata.setText(self.text())
-        mimedata.setImageData(self.pixmap().toImage())
+
+        mimedata.setImageData(self.pixmap().toImage()) #изображение в качестве данных, которое потом можно будет дропнуть
 
         drag.setMimeData(mimedata)
 
         pixmap = QPixmap(self.size())
+
+        #painter - рисование изображения во время перетягивания
         painter = QPainter(pixmap)
         painter.drawPixmap(self.rect(), self.grab())
         painter.end()
+
         drag.setPixmap(pixmap)
         drag.setHotSpot(event.pos())
         drag.exec_(Qt.CopyAction | Qt.MoveAction)
