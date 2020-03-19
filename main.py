@@ -13,7 +13,7 @@ from PyQt5.QtGui import QTransform, QPixmap, QImage
 from ClickableLabel import ClickableLabel
 from Rules import Window_rules
 from Game import Game
-from DnD import DraggableLabel
+from DnD import DraggableLabel, DropLabel
 
 
 class Ui_MainWindow():
@@ -25,13 +25,13 @@ class Ui_MainWindow():
         MainWindow.setUnifiedTitleAndToolBarOnMac(False)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
-        self.patent = QtWidgets.QLabel(self.centralwidget)
-        self.patent.setGeometry(QtCore.QRect(310, 70, 721, 771))
-        self.patent.setText("")
-        self.patent.setPixmap(QtGui.QPixmap("patent.png"))
-        self.patent.setScaledContents(True)
-        self.patent.setOpenExternalLinks(False)
-        self.patent.setObjectName("patent")
+        #self.patent = QtWidgets.QLabel(self.centralwidget)
+        #self.patent.setGeometry(QtCore.QRect(310, 70, 721, 771))
+        #self.patent.setText("")
+        #self.patent.setPixmap(QtGui.QPixmap("patent.png"))
+        #self.patent.setScaledContents(True)
+        #self.patent.setOpenExternalLinks(False)
+        #self.patent.setObjectName("patent")
         self.frame_edit = QtWidgets.QFrame(self.centralwidget)
         self.frame_edit.setGeometry(QtCore.QRect(20, 420, 271, 401))
         font = QtGui.QFont()
@@ -342,6 +342,16 @@ class Ui_MainWindow():
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
         # Весь новый код только ниже! -------------------------------
+
+        #Droppable label, можно заметить при перетягивании сыринки патент готов к дропу
+        #Но не прописано нормальное действие по дропу, возникли трудности
+        self.patent = DropLabel(self.centralwidget)
+        self.patent.setGeometry(QtCore.QRect(310, 70, 721, 771))
+        self.patent.setText("")
+        self.patent.setPixmap(QtGui.QPixmap("patent.png"))
+        self.patent.setScaledContents(True)
+        self.patent.setOpenExternalLinks(False)
+        self.patent.setObjectName("patent")
 
 
         # DRAG (only) raw main
