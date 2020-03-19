@@ -382,8 +382,8 @@ class Ui_MainWindow():
         self.patentbox.setItemText(0, _translate("MainWindow", self.game1.name))
         self.patentbox.setItemText(1, _translate("MainWindow", "Patent2"))
         self.label_lvl.setText(_translate("MainWindow", "Required level"))
-        self.name_patent.setText(_translate("MainWindow", "Training session 07.02.2020"))
-        self.label_difficulty.setText(_translate("MainWindow", "Difficulty: Hard"))
+        self.name_patent.setText(_translate("MainWindow", self.current_game.name))
+        self.label_difficulty.setText(_translate("MainWindow", "Difficulty: " + self.current_game.difficulty))
         self.label_progress.setText(_translate("MainWindow", "Progress"))
         self.label_time1.setText(_translate("MainWindow", " Времени прошло:"))
         self.label_time2.setText(_translate("MainWindow", " Времени осталось:"))
@@ -439,7 +439,7 @@ class Ui_MainWindow():
 
     # Показ окна правил
     def show_window_rules(self):
-        self.window = Window_rules()  # file Rules.py
+        self.window = Window_rules(self.current_game)  # file Rules.py
         self.window.show()
 
     # Функционал кнопки Accept
@@ -448,6 +448,7 @@ class Ui_MainWindow():
         self.image_new_patent = QImage(self.current_game.path + '/patent.png')
         self.patent.setPixmap(QPixmap(self.image_new_patent))
         self.name_patent.setText(self.current_game.name)
+        self.current_required_level = self.spin_lvl.value()
         self.label_difficulty.setText("Difficulty: " + self.current_game.difficulty)
         self.label_A.setPixmap(QPixmap(QImage(self.current_game.path + '/a.png')))
         self.label_B.setPixmap(QPixmap(QImage(self.current_game.path + '/b.png')))
