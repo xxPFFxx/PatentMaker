@@ -6,14 +6,14 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QPushButton
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QPushButton, QLabel
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtGui import QTransform, QPixmap, QImage
+from PyQt5.QtGui import QTransform, QPixmap, QImage, QDrag, QPixmap, QPainter, QCursor
 from ClickableLabel import ClickableLabel
 from Rules import Window_rules
 from Game import Game
-from DnD import DraggableLabel, DropLabel
+from PyQt5.QtCore import QMimeData, Qt, QRect
 
 
 class Ui_MainWindow():
@@ -25,13 +25,13 @@ class Ui_MainWindow():
         MainWindow.setUnifiedTitleAndToolBarOnMac(False)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
-        #self.patent = QtWidgets.QLabel(self.centralwidget)
-        #self.patent.setGeometry(QtCore.QRect(310, 70, 721, 771))
-        #self.patent.setText("")
-        #self.patent.setPixmap(QtGui.QPixmap("patent.png"))
-        #self.patent.setScaledContents(True)
-        #self.patent.setOpenExternalLinks(False)
-        #self.patent.setObjectName("patent")
+        # self.patent = QtWidgets.QLabel(self.centralwidget)
+        # self.patent.setGeometry(QtCore.QRect(310, 70, 721, 771))
+        # self.patent.setText("")
+        # self.patent.setPixmap(QtGui.QPixmap("patent.png"))
+        # self.patent.setScaledContents(True)
+        # self.patent.setOpenExternalLinks(False)
+        # self.patent.setObjectName("patent")
         self.frame_edit = QtWidgets.QFrame(self.centralwidget)
         self.frame_edit.setGeometry(QtCore.QRect(20, 420, 271, 401))
         font = QtGui.QFont()
@@ -173,37 +173,37 @@ class Ui_MainWindow():
         self.label_C = ClickableLabel(self.frame_raw_basic)
         self.label_C.setGeometry(QtCore.QRect(40, 140, 71, 81))
         self.label_C.setText("")
-        self.label_C.setPixmap(QtGui.QPixmap(self.current_game.path+'/c.png'))
+        self.label_C.setPixmap(QtGui.QPixmap(self.current_game.path + '/c.png'))
         self.label_C.setScaledContents(True)
         self.label_C.setObjectName("label_C")
         self.label_F = ClickableLabel(self.frame_raw_basic)
         self.label_F.setGeometry(QtCore.QRect(150, 230, 71, 81))
         self.label_F.setText("")
-        self.label_F.setPixmap(QtGui.QPixmap(self.current_game.path+'/f.png'))
+        self.label_F.setPixmap(QtGui.QPixmap(self.current_game.path + '/f.png'))
         self.label_F.setScaledContents(True)
         self.label_F.setObjectName("label_F")
         self.label_A = ClickableLabel(self.frame_raw_basic)
         self.label_A.setGeometry(QtCore.QRect(40, 50, 71, 81))
         self.label_A.setText("")
-        self.label_A.setPixmap(QtGui.QPixmap(self.current_game.path+'/a.png'))
+        self.label_A.setPixmap(QtGui.QPixmap(self.current_game.path + '/a.png'))
         self.label_A.setScaledContents(True)
         self.label_A.setObjectName("label_A")
         self.label_B = ClickableLabel(self.frame_raw_basic)
         self.label_B.setGeometry(QtCore.QRect(150, 50, 71, 81))
         self.label_B.setText("")
-        self.label_B.setPixmap(QtGui.QPixmap(self.current_game.path+'/b.png'))
+        self.label_B.setPixmap(QtGui.QPixmap(self.current_game.path + '/b.png'))
         self.label_B.setScaledContents(True)
         self.label_B.setObjectName("label_B")
         self.label_D = ClickableLabel(self.frame_raw_basic)
         self.label_D.setGeometry(QtCore.QRect(150, 140, 71, 81))
         self.label_D.setText("")
-        self.label_D.setPixmap(QtGui.QPixmap(self.current_game.path+'/d.png'))
+        self.label_D.setPixmap(QtGui.QPixmap(self.current_game.path + '/d.png'))
         self.label_D.setScaledContents(True)
         self.label_D.setObjectName("label_D")
         self.label_E = ClickableLabel(self.frame_raw_basic)
         self.label_E.setGeometry(QtCore.QRect(40, 230, 71, 81))
         self.label_E.setText("")
-        self.label_E.setPixmap(QtGui.QPixmap(self.current_game.path+'/e.png'))
+        self.label_E.setPixmap(QtGui.QPixmap(self.current_game.path + '/e.png'))
         self.label_E.setScaledContents(True)
         self.label_E.setObjectName("label_E")
         self.label_basic = QtWidgets.QLabel(self.frame_raw_basic)
@@ -222,37 +222,37 @@ class Ui_MainWindow():
         self.label_N1 = ClickableLabel(self.frame_raw_add)
         self.label_N1.setGeometry(QtCore.QRect(40, 40, 71, 81))
         self.label_N1.setText("")
-        self.label_N1.setPixmap(QtGui.QPixmap(self.current_game.path+'/n1.png'))
+        self.label_N1.setPixmap(QtGui.QPixmap(self.current_game.path + '/n1.png'))
         self.label_N1.setScaledContents(True)
         self.label_N1.setObjectName("label_N1")
         self.label_N3 = ClickableLabel(self.frame_raw_add)
         self.label_N3.setGeometry(QtCore.QRect(40, 130, 71, 81))
         self.label_N3.setText("")
-        self.label_N3.setPixmap(QtGui.QPixmap(self.current_game.path+'/n3.png'))
+        self.label_N3.setPixmap(QtGui.QPixmap(self.current_game.path + '/n3.png'))
         self.label_N3.setScaledContents(True)
         self.label_N3.setObjectName("label_N3")
         self.label_N2 = ClickableLabel(self.frame_raw_add)
         self.label_N2.setGeometry(QtCore.QRect(150, 40, 71, 81))
         self.label_N2.setText("")
-        self.label_N2.setPixmap(QtGui.QPixmap(self.current_game.path+'/n2.png'))
+        self.label_N2.setPixmap(QtGui.QPixmap(self.current_game.path + '/n2.png'))
         self.label_N2.setScaledContents(True)
         self.label_N2.setObjectName("label_N2")
         self.label_N4 = ClickableLabel(self.frame_raw_add)
         self.label_N4.setGeometry(QtCore.QRect(150, 130, 71, 81))
         self.label_N4.setText("")
-        self.label_N4.setPixmap(QtGui.QPixmap(self.current_game.path+'/n4.png'))
+        self.label_N4.setPixmap(QtGui.QPixmap(self.current_game.path + '/n4.png'))
         self.label_N4.setScaledContents(True)
         self.label_N4.setObjectName("label_N4")
         self.label_N5 = ClickableLabel(self.frame_raw_add)
         self.label_N5.setGeometry(QtCore.QRect(40, 220, 71, 81))
         self.label_N5.setText("")
-        self.label_N5.setPixmap(QtGui.QPixmap(self.current_game.path+'/n5.png'))
+        self.label_N5.setPixmap(QtGui.QPixmap(self.current_game.path + '/n5.png'))
         self.label_N5.setScaledContents(True)
         self.label_N5.setObjectName("label_N5")
         self.label_N6 = ClickableLabel(self.frame_raw_add)
         self.label_N6.setGeometry(QtCore.QRect(150, 220, 71, 81))
         self.label_N6.setText("")
-        self.label_N6.setPixmap(QtGui.QPixmap(self.current_game.path+'/n6.png'))
+        self.label_N6.setPixmap(QtGui.QPixmap(self.current_game.path + '/n6.png'))
         self.label_N6.setScaledContents(True)
         self.label_N6.setObjectName("label_N6")
         self.label_add = QtWidgets.QLabel(self.frame_raw_add)
@@ -276,12 +276,12 @@ class Ui_MainWindow():
         self.label_active.setFont(font)
         self.label_active.setAlignment(QtCore.Qt.AlignCenter)
         self.label_active.setObjectName("label_active")
-        #self.label_raw_main = QtWidgets.QLabel(self.frame_active)
-        #self.label_raw_main.setGeometry(QtCore.QRect(90, 40, 71, 81))
-        #self.label_raw_main.setText("")
-        #self.label_raw_main.setPixmap(QtGui.QPixmap("a.png"))
-        #self.label_raw_main.setScaledContents(True)
-        #self.label_raw_main.setObjectName("label_raw_main")
+        # self.label_raw_main = QtWidgets.QLabel(self.frame_active)
+        # self.label_raw_main.setGeometry(QtCore.QRect(90, 40, 71, 81))
+        # self.label_raw_main.setText("")
+        # self.label_raw_main.setPixmap(QtGui.QPixmap("a.png"))
+        # self.label_raw_main.setScaledContents(True)
+        # self.label_raw_main.setObjectName("label_raw_main")
         self.button_left = QtWidgets.QPushButton(self.frame_active)
         self.button_left.setGeometry(QtCore.QRect(20, 130, 91, 31))
         self.button_left.setObjectName("button_left")
@@ -343,8 +343,8 @@ class Ui_MainWindow():
 
         # Весь новый код только ниже! -------------------------------
 
-        #Droppable label, можно заметить при перетягивании сыринки патент готов к дропу
-        #Но не прописано нормальное действие по дропу, возникли трудности
+        # Droppable label, можно заметить при перетягивании сыринки патент готов к дропу
+        # Но не прописано нормальное действие по дропу, возникли трудности
         self.patent = DropLabel(self.centralwidget)
         self.patent.setGeometry(QtCore.QRect(310, 70, 721, 771))
         self.patent.setText("")
@@ -483,6 +483,72 @@ class Ui_MainWindow():
         self.label_N5.setPixmap(QPixmap(QImage(self.current_game.path + '/n5.png')))
         self.label_N6.setPixmap(QPixmap(QImage(self.current_game.path + '/n6.png')))
         # пока что не обработано колесико для выбора желаемого уровня
+
+
+class DraggableLabel(QtWidgets.QLabel):
+    def __init__(self, parent, image):
+        super(QtWidgets.QLabel, self).__init__(parent)
+        self.setPixmap(QPixmap(image))
+        self.show()
+
+    def mousePressEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            self.drag_start_position = event.pos()
+
+    def mouseMoveEvent(self, event):
+        # перетягивание на левую кнопку мыши + установка минимальной длины для начала перетягивания (4 пикселя)
+        if not (event.buttons() & Qt.LeftButton):
+            return
+        if (event.pos() - self.drag_start_position).manhattanLength() < QApplication.startDragDistance():
+            return
+
+        drag = QDrag(self)
+
+        # QMimeData() - класс для хранения данных любого типа во время перетягивания
+        mimedata = QMimeData()
+
+        mimedata.setImageData(
+            self.pixmap().toImage())  # изображение в качестве данных, которое потом можно будет дропнуть
+
+        drag.setMimeData(mimedata)
+
+        pixmap = QPixmap(self.size())
+
+        # painter - рисование изображения во время перетягивания
+        painter = QPainter(pixmap)
+        painter.drawPixmap(self.rect(), self.grab())
+        painter.end()
+
+        drag.setPixmap(pixmap)
+        drag.setHotSpot(event.pos())
+        drag.exec_(Qt.CopyAction | Qt.MoveAction)
+
+
+class DropLabel(QtWidgets.QLabel):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.setAcceptDrops(True)
+
+    def dragEnterEvent(self, event):
+        if event.mimeData().hasImage():
+            event.accept()
+        else:
+            event.ignore()
+
+    def dropEvent(self, event):
+        if event.mimeData().hasImage():
+            self.qpoint = str(event.pos())
+            self.pos = self.qpoint[20:len(self.qpoint) - 1]
+            self.x, self.y = self.pos.split(', ')
+            self.x, self.y = int(self.x), int(self.y)  # достали координаты drop из объекта PyQt5.QtCore.QPoint(x, y)
+            print("Координаты дропа:", self.x, self.y)
+
+            self.new_raw = QtWidgets.QLabel(ui.centralwidget)
+            self.new_raw.setGeometry(QtCore.QRect(self.x + 310, self.y + 70 , 71, 81))
+            self.new_raw.setPixmap(QtGui.QPixmap("a.png"))
+            self.new_raw.setScaledContents(True)
+            self.new_raw.show()
+            # self.setPixmap(QPixmap.fromImage(QImage(event.mimeData().imageData())))
 
 
 if __name__ == "__main__":
