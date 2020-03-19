@@ -543,6 +543,7 @@ class DropLabel(QtWidgets.QLabel):
             self.x, self.y = self.pos.split(', ')
             self.x, self.y = int(self.x), int(self.y)  # достали координаты drop из объекта PyQt5.QtCore.QPoint(x, y)
             print("Координаты дропа:", self.x, self.y)
+            print(event.source().drag_start_position)
 
             self.new_raw = QtWidgets.QLabel(ui.centralwidget)
             self.new_raw.setGeometry(QtCore.QRect(self.x + 310, self.y + 70 , 71, 81))
