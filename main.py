@@ -444,13 +444,16 @@ class Ui_MainWindow():
     def turn_right(self):
         self.angle += 90
         t = QTransform().rotate(self.angle)
-        self.label_raw_main.setPixmap(QPixmap(self.image_raw_main).transformed(t))
+        self.image_raw_main = QPixmap(self.image_raw_main).transformed(t)
+        self.label_raw_main.setPixmap(self.image_raw_main)
 
     # Поворот сырья налево
     def turn_left(self):
         self.angle -= 90
         t = QTransform().rotate(self.angle)
-        self.label_raw_main.setPixmap(QPixmap(self.image_raw_main).transformed(t))
+        self.image_raw_main = QPixmap(self.image_raw_main).transformed(t)
+        self.label_raw_main.setPixmap(self.image_raw_main)
+
 
     # Обновление изображения выбранного сырья
     def update_raw_main_image(self, path):
@@ -549,13 +552,13 @@ class DropLabel(QtWidgets.QLabel):
             self.pos2 = self.qpoint2[20:len(self.qpoint2) - 1]
             self.x2, self.y2 = self.pos2.split(', ')
             self.x2, self.y2 = int(self.x2), int(self.y2)  # достали координаты drop из объекта PyQt5.QtCore.QPoint(x, y)
-            print("Координаты дропа:", self.x2, self.y2)
+            print("Координаты драга:", self.x2, self.y2)
 
 
 
             self.new_raw = QtWidgets.QLabel(ui.centralwidget)
             self.new_raw.setGeometry(QtCore.QRect(self.x1 + 310 - self.x2 + 5, self.y1 + 70 - self.y2 - 5 , 71, 81))
-            self.new_raw.setPixmap(QtGui.QPixmap("a.png"))
+            self.new_raw.setPixmap(QtGui.QPixmap(ui.image_raw_main))
             self.new_raw.setScaledContents(True)
             self.new_raw.show()
             # self.setPixmap(QPixmap.fromImage(QImage(event.mimeData().imageData())))
