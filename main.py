@@ -13,6 +13,7 @@ from PyQt5.QtGui import QTransform, QPixmap, QImage
 from ClickableLabel import ClickableLabel
 from Rules import Window_rules
 from Game import Game
+from DnD import DraggableLabel
 
 
 class Ui_MainWindow():
@@ -275,12 +276,12 @@ class Ui_MainWindow():
         self.label_active.setFont(font)
         self.label_active.setAlignment(QtCore.Qt.AlignCenter)
         self.label_active.setObjectName("label_active")
-        self.label_raw_main = QtWidgets.QLabel(self.frame_active)
-        self.label_raw_main.setGeometry(QtCore.QRect(90, 40, 71, 81))
-        self.label_raw_main.setText("")
-        self.label_raw_main.setPixmap(QtGui.QPixmap("a.png"))
-        self.label_raw_main.setScaledContents(True)
-        self.label_raw_main.setObjectName("label_raw_main")
+        #self.label_raw_main = QtWidgets.QLabel(self.frame_active)
+        #self.label_raw_main.setGeometry(QtCore.QRect(90, 40, 71, 81))
+        #self.label_raw_main.setText("")
+        #self.label_raw_main.setPixmap(QtGui.QPixmap("a.png"))
+        #self.label_raw_main.setScaledContents(True)
+        #self.label_raw_main.setObjectName("label_raw_main")
         self.button_left = QtWidgets.QPushButton(self.frame_active)
         self.button_left.setGeometry(QtCore.QRect(20, 130, 91, 31))
         self.button_left.setObjectName("button_left")
@@ -341,6 +342,15 @@ class Ui_MainWindow():
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
         # Весь новый код только ниже! -------------------------------
+
+
+        # DRAG (only) raw main
+        self.label_raw_main = DraggableLabel(self.frame_active, 'a.png')
+        self.label_raw_main.setGeometry(QtCore.QRect(90, 40, 71, 81))
+        self.label_raw_main.setText("")
+        self.label_raw_main.setPixmap(QtGui.QPixmap("a.png"))
+        self.label_raw_main.setScaledContents(True)
+        self.label_raw_main.setObjectName("label_raw_main")
 
         # Обновление выбранного сырья при нажатии
         self.label_A.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/a.png'))
