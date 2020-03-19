@@ -5,7 +5,6 @@ from PyQt5.QtGui import QDrag, QPixmap, QPainter, QCursor
 from PyQt5.QtCore import QMimeData, Qt
 
 
-
 class DraggableLabel(QLabel):
     def __init__(self,parent,image):
         super(QLabel, self).__init__(parent)
