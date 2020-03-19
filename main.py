@@ -443,14 +443,14 @@ class Ui_MainWindow():
     # Поворот сырья направо
     def turn_right(self):
         self.angle += 90
-        t = QTransform().rotate(self.angle)
+        t = QTransform().rotate(90)
         self.image_raw_main = QPixmap(self.image_raw_main).transformed(t)
         self.label_raw_main.setPixmap(self.image_raw_main)
 
     # Поворот сырья налево
     def turn_left(self):
         self.angle -= 90
-        t = QTransform().rotate(self.angle)
+        t = QTransform().rotate(-90)
         self.image_raw_main = QPixmap(self.image_raw_main).transformed(t)
         self.label_raw_main.setPixmap(self.image_raw_main)
 
