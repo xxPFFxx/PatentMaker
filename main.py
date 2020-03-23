@@ -560,7 +560,6 @@ class DropLabel(QtWidgets.QLabel):
             self.x2, self.y2 = int(self.x2), int(self.y2)  # достали координаты drop из объекта PyQt5.QtCore.QPoint(x, y)
             print("Координаты драга:", self.x2, self.y2)
 
-            QTransform().translate(150,150)
 
             self.new_raw = QtWidgets.QLabel(ui.frame_patent)
             self.new_raw.setGeometry(QtCore.QRect(self.x1 - self.x2, self.y1 - self.y2, 50, 87))
