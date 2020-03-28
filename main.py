@@ -452,6 +452,10 @@ class Ui_MainWindow():
         self.angle += 90
         t = QTransform().rotate(90)
         self.image_raw_main = QPixmap(self.image_raw_main).transformed(t)
+        if (self.angle - 90) % 180 == 0:
+            self.label_raw_main.setGeometry(QtCore.QRect(75, 60, 87, 50))
+        elif self.angle % 180 == 0:
+            self.label_raw_main.setGeometry(QtCore.QRect(90, 40, 50, 87))
         self.label_raw_main.setPixmap(self.image_raw_main)
 
     # Поворот сырья налево
@@ -459,6 +463,10 @@ class Ui_MainWindow():
         self.angle -= 90
         t = QTransform().rotate(-90)
         self.image_raw_main = QPixmap(self.image_raw_main).transformed(t)
+        if (self.angle - 90) % 180 == 0:
+            self.label_raw_main.setGeometry(QtCore.QRect(75, 60, 87, 50))
+        elif self.angle % 180 == 0:
+            self.label_raw_main.setGeometry(QtCore.QRect(90, 40, 50, 87))
         self.label_raw_main.setPixmap(self.image_raw_main)
 
     # Обновление изображения выбранного сырья
@@ -582,7 +590,10 @@ class DropLabel(QtWidgets.QLabel):
             # ui.frame_progress.move(event.pos())
             # ui.frame_progress.raise_()
             self.new_raw = QtWidgets.QLabel(ui.frame_patent)
-            self.new_raw.setGeometry(QtCore.QRect(position.x(), position.y(), 51, 87))
+            if (ui.angle - 90) % 180 == 0:
+                self.new_raw.setGeometry(QtCore.QRect(position.x(), position.y(), 87, 50))
+            elif ui.angle % 180 == 0:
+                self.new_raw.setGeometry(QtCore.QRect(position.x(), position.y(), 50, 87))
             self.new_raw.setPixmap(QtGui.QPixmap(ui.image_raw_main))
             self.new_raw.setScaledContents(True)
             # self.new_raw.show()
