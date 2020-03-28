@@ -16,7 +16,6 @@ from Game import Game
 from PyQt5.QtCore import QMimeData, Qt, QRect
 
 
-
 class Ui_MainWindow():
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -288,12 +287,12 @@ class Ui_MainWindow():
         self.frame_patent.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_patent.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_patent.setObjectName("frame_patent")
-        #self.patent = QtWidgets.QLabel(self.frame_patent)
-        #self.patent.setGeometry(QtCore.QRect(0, 0, 721, 761))
-        #self.patent.setText("")
-        #self.patent.setPixmap(QtGui.QPixmap("b.png"))
-        #self.patent.setScaledContents(True)
-        #self.patent.setObjectName("patent")
+        # self.patent = QtWidgets.QLabel(self.frame_patent)
+        # self.patent.setGeometry(QtCore.QRect(0, 0, 721, 761))
+        # self.patent.setText("")
+        # self.patent.setPixmap(QtGui.QPixmap("b.png"))
+        # self.patent.setScaledContents(True)
+        # self.patent.setObjectName("patent")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1340, 21))
@@ -359,7 +358,6 @@ class Ui_MainWindow():
         self.patent.setOpenExternalLinks(False)
         self.patent.setObjectName("patent")
 
-
         # DRAG (only) raw main
         self.label_raw_main = DraggableLabel(self.frame_active, 'a.png')
         self.label_raw_main.setGeometry(QtCore.QRect(90, 40, 50, 87))
@@ -397,6 +395,8 @@ class Ui_MainWindow():
         self.button_left.clicked.connect(self.turn_left)
         self.button_rules.clicked.connect(self.show_window_rules)
         self.button_accept.clicked.connect(self.change_patent)
+        self.button_undo.clicked.connect(self.undo_action)
+        self.button_redo.clicked.connect(self.redo_action)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -444,6 +444,8 @@ class Ui_MainWindow():
         self.game1 = Game(1, 'Championat 28.02.2020', 'Easy')
         self.current_game = self.game1
         self.data = {self.game1.name: self.game1}
+        self.visible_raws = []
+        self.invisible_raws = []
 
     # Поворот сырья направо
     def turn_right(self):
@@ -458,7 +460,6 @@ class Ui_MainWindow():
         t = QTransform().rotate(-90)
         self.image_raw_main = QPixmap(self.image_raw_main).transformed(t)
         self.label_raw_main.setPixmap(self.image_raw_main)
-
 
     # Обновление изображения выбранного сырья
     def update_raw_main_image(self, path):
@@ -493,6 +494,21 @@ class Ui_MainWindow():
         self.label_N6.setPixmap(QPixmap(QImage(self.current_game.path + '/n6.png')))
         # пока что не обработано колесико для выбора желаемого уровня
 
+    def undo_action(self):
+        self.invisible_raws.append(self.visible_raws[-1])
+        self.visible_raws.pop(-1).setParent(None)
+        print(self.visible_raws, self.invisible_raws)
+
+    def redo_action(self):
+        self.visible_raws.append(self.invisible_raws[-1])
+        self.invisible_raws.pop(-1)
+        self.show_current_raws()
+
+    def show_current_raws(self):
+        for elem in self.visible_raws:
+            elem.setParent(self.frame_patent)
+            elem.show()
+
 
 class DraggableLabel(QtWidgets.QLabel):
     def __init__(self, parent, image):
@@ -511,19 +527,17 @@ class DraggableLabel(QtWidgets.QLabel):
         if (event.pos() - self.drag_start_position).manhattanLength() < 2:
             self.correction = event.pos() - self.drag_start_position
 
-
         drag = QDrag(self)
 
         # QMimeData() - класс для хранения данных любого типа во время перетягивания
         mimedata = QMimeData()
 
         mimedata.setImageData(
-        self.pixmap().toImage())  # изображение в качестве данных, которое потом можно будет дропнуть
+            self.pixmap().toImage())  # изображение в качестве данных, которое потом можно будет дропнуть
 
         drag.setMimeData(mimedata)
 
         pixmap = QPixmap(self.size())
-
         # painter - рисование изображения во время перетягивания
         painter = QPainter(pixmap)
         painter.drawPixmap(self.rect(), self.grab())
@@ -539,7 +553,6 @@ class DropLabel(QtWidgets.QLabel):
         super().__init__(parent)
         self.setAcceptDrops(True)
 
-
     def dragEnterEvent(self, event):
         if event.mimeData().hasImage():
             event.accept()
@@ -548,30 +561,29 @@ class DropLabel(QtWidgets.QLabel):
 
     def dropEvent(self, event):
         if event.mimeData().hasImage():
+            # self.qpoint1 = str(event.pos())
+            # self.pos1 = self.qpoint1[20:len(self.qpoint1) - 1]
+            # self.x1, self.y1 = self.pos1.split(', ')
+            # self.x1, self.y1 = int(self.x1), int(self.y1)  # достали координаты drop из объекта PyQt5.QtCore.QPoint(x, y)
+            # print("Координаты дропа:", self.x1, self.y1)
 
-            #self.qpoint1 = str(event.pos())
-           # self.pos1 = self.qpoint1[20:len(self.qpoint1) - 1]
-            #self.x1, self.y1 = self.pos1.split(', ')
-            #self.x1, self.y1 = int(self.x1), int(self.y1)  # достали координаты drop из объекта PyQt5.QtCore.QPoint(x, y)
-            #print("Координаты дропа:", self.x1, self.y1)
-
-            #self.qpoint2 = str(event.source().drag_start_position)
-            #self.pos2 = self.qpoint2[20:len(self.qpoint2) - 1]
-            #self.x2, self.y2 = self.pos2.split(', ')
-            #self.x2, self.y2 = int(self.x2), int(self.y2)  # достали координаты drop из объекта PyQt5.QtCore.QPoint(x, y)
-            #print("Координаты драга:", self.x2, self.y2)
-
+            # self.qpoint2 = str(event.source().drag_start_position)
+            # self.pos2 = self.qpoint2[20:len(self.qpoint2) - 1]
+            # self.x2, self.y2 = self.pos2.split(', ')
+            # self.x2, self.y2 = int(self.x2), int(self.y2)  # достали координаты drop из объекта PyQt5.QtCore.QPoint(x, y)
+            # print("Координаты драга:", self.x2, self.y2)
 
             position = event.pos() - ui.label_raw_main.drag_start_position - ui.label_raw_main.correction
-            #ui.frame_progress.move(event.pos())
-            #ui.frame_progress.raise_()
-            print(position)
+            # ui.frame_progress.move(event.pos())
+            # ui.frame_progress.raise_()
             self.new_raw = QtWidgets.QLabel(ui.frame_patent)
             self.new_raw.setGeometry(QtCore.QRect(position.x(), position.y(), 51, 87))
             self.new_raw.setPixmap(QtGui.QPixmap(ui.image_raw_main))
             self.new_raw.setScaledContents(True)
-            self.new_raw.show()
-            #self.setPixmap(QPixmap.fromImage(QImage(event.mimeData().imageData())))
+            # self.new_raw.show()
+            ui.visible_raws.append(self.new_raw)
+            ui.show_current_raws()
+            # self.setPixmap(QPixmap.fromImage(QImage(event.mimeData().imageData())))
 
 
 if __name__ == "__main__":
