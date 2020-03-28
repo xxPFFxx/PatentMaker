@@ -495,14 +495,19 @@ class Ui_MainWindow():
         # пока что не обработано колесико для выбора желаемого уровня
 
     def undo_action(self):
-        self.invisible_raws.append(self.visible_raws[-1])
-        self.visible_raws.pop(-1).setParent(None)
-        print(self.visible_raws, self.invisible_raws)
+        try:
+            self.invisible_raws.append(self.visible_raws[-1])
+            self.visible_raws.pop(-1).setParent(None)
+        except IndexError:
+            print('Нечего Undить') #TODO Окно / надпись с сообщением о невозможности Undo
 
     def redo_action(self):
-        self.visible_raws.append(self.invisible_raws[-1])
-        self.invisible_raws.pop(-1)
-        self.show_current_raws()
+        try:
+            self.visible_raws.append(self.invisible_raws[-1])
+            self.invisible_raws.pop(-1)
+            self.show_current_raws()
+        except IndexError:
+            print('Нечего Redить') #TODO Окно / надпись с сообщением о невозможности Redo
 
     def show_current_raws(self):
         for elem in self.visible_raws:
