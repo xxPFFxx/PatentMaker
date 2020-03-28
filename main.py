@@ -508,8 +508,7 @@ class DraggableLabel(QtWidgets.QLabel):
         # перетягивание на левую кнопку мыши + установка минимальной длины для начала перетягивания (4 пикселя)
         if not (event.buttons() & Qt.LeftButton):
             return
-        if (event.pos() - self.drag_start_position).manhattanLength() < QApplication.startDragDistance():
-            return
+
 
         drag = QDrag(self)
 
@@ -529,7 +528,7 @@ class DraggableLabel(QtWidgets.QLabel):
         painter.end()
 
         drag.setPixmap(pixmap)
-        drag.setHotSpot(event.pos() - self.rect().topLeft())
+        drag.setHotSpot(event.pos())
         drag.exec_(Qt.CopyAction | Qt.MoveAction)
 
 
@@ -545,9 +544,9 @@ class DropLabel(QtWidgets.QLabel):
         else:
             event.ignore()
 
-
     def dropEvent(self, event):
         if event.mimeData().hasImage():
+
             #self.qpoint1 = str(event.pos())
            # self.pos1 = self.qpoint1[20:len(self.qpoint1) - 1]
             #self.x1, self.y1 = self.pos1.split(', ')
@@ -560,14 +559,18 @@ class DropLabel(QtWidgets.QLabel):
             #self.x2, self.y2 = int(self.x2), int(self.y2)  # достали координаты drop из объекта PyQt5.QtCore.QPoint(x, y)
             #print("Координаты драга:", self.x2, self.y2)
 
+
+            #отдельный фрейм для эектива и все ок вроде будет
             position = event.pos() - event.source().drag_start_position
+            #ui.frame_progress.move(event.pos())
+            #ui.frame_progress.raise_()
             print(position)
             self.new_raw = QtWidgets.QLabel(ui.frame_patent)
             self.new_raw.setGeometry(QtCore.QRect(position.x(), position.y(), 51, 87))
             self.new_raw.setPixmap(QtGui.QPixmap(ui.image_raw_main))
             self.new_raw.setScaledContents(True)
             self.new_raw.show()
-            # self.setPixmap(QPixmap.fromImage(QImage(event.mimeData().imageData())))
+            #self.setPixmap(QPixmap.fromImage(QImage(event.mimeData().imageData())))
 
 
 if __name__ == "__main__":
