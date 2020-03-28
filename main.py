@@ -508,6 +508,8 @@ class DraggableLabel(QtWidgets.QLabel):
         # перетягивание на левую кнопку мыши + установка минимальной длины для начала перетягивания (4 пикселя)
         if not (event.buttons() & Qt.LeftButton):
             return
+        if (event.pos() - self.drag_start_position).manhattanLength() < 2:
+            self.correction = event.pos() - self.drag_start_position
 
 
         drag = QDrag(self)
@@ -528,7 +530,7 @@ class DraggableLabel(QtWidgets.QLabel):
         painter.end()
 
         drag.setPixmap(pixmap)
-        drag.setHotSpot(event.pos())
+        drag.setHotSpot(event.pos() - self.rect().topLeft())
         drag.exec_(Qt.CopyAction | Qt.MoveAction)
 
 
@@ -560,8 +562,7 @@ class DropLabel(QtWidgets.QLabel):
             #print("Координаты драга:", self.x2, self.y2)
 
 
-            #отдельный фрейм для эектива и все ок вроде будет
-            position = event.pos() - event.source().drag_start_position
+            position = event.pos() - ui.label_raw_main.drag_start_position - ui.label_raw_main.correction
             #ui.frame_progress.move(event.pos())
             #ui.frame_progress.raise_()
             print(position)
