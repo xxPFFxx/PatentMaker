@@ -397,6 +397,7 @@ class Ui_MainWindow():
         self.button_accept.clicked.connect(self.change_patent)
         self.button_undo.clicked.connect(self.undo_action)
         self.button_redo.clicked.connect(self.redo_action)
+        self.button_clear.clicked.connect(self.clear_action)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -516,6 +517,12 @@ class Ui_MainWindow():
             self.show_current_raws()
         except IndexError:
             print('Нечего Redить') #TODO Окно / надпись с сообщением о невозможности Redo
+
+    def clear_action(self):
+        for elem in self.visible_raws:
+            elem.setParent(None)
+        self.visible_raws.clear()
+        self.invisible_raws.clear()
 
     def show_current_raws(self):
         for elem in self.visible_raws:
