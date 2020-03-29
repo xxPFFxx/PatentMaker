@@ -447,6 +447,7 @@ class Ui_MainWindow():
         self.data = {self.game1.name: self.game1}
         self.visible_raws = []
         self.invisible_raws = []
+        self.flag_clear = False
 
     # Поворот сырья направо
     def turn_right(self):
@@ -504,19 +505,19 @@ class Ui_MainWindow():
         # пока что не обработано колесико для выбора желаемого уровня
 
     def undo_action(self):
-        if not self.flagclear:
+        if not self.flag_clear:
             try:
                 self.invisible_raws.append(self.visible_raws[-1])
                 self.visible_raws.pop(-1).setParent(None)
             except IndexError:
                 print('Нечего Undить') #TODO Окно / надпись с сообщением о невозможности Undo
-        if self.flagclear:
+        if self.flag_clear:
             try:
                 for i in range(len(self.clear_raws)):
                     self.visible_raws.append(self.clear_raws[i])
                 self.clear_raws.clear()
                 self.show_current_raws()
-                self.flagclear = False
+                self.flag_clear = False
             except:
                 pass
 
@@ -530,7 +531,7 @@ class Ui_MainWindow():
 
     def clear_action(self):
         self.clear_raws = [el for el in self.visible_raws]
-        self.flagclear = True
+        self.flag_clear = True
         for elem in self.visible_raws:
             elem.setParent(None)
         self.visible_raws.clear()
