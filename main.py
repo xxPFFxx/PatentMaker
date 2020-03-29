@@ -504,11 +504,21 @@ class Ui_MainWindow():
         # пока что не обработано колесико для выбора желаемого уровня
 
     def undo_action(self):
-        try:
-            self.invisible_raws.append(self.visible_raws[-1])
-            self.visible_raws.pop(-1).setParent(None)
-        except IndexError:
-            print('Нечего Undить') #TODO Окно / надпись с сообщением о невозможности Undo
+        if not self.flagclear:
+            try:
+                self.invisible_raws.append(self.visible_raws[-1])
+                self.visible_raws.pop(-1).setParent(None)
+            except IndexError:
+                print('Нечего Undить') #TODO Окно / надпись с сообщением о невозможности Undo
+        if self.flagclear:
+            try:
+                for i in range(len(self.clear_raws)):
+                    self.visible_raws.append(self.clear_raws[i])
+                self.clear_raws.clear()
+                self.show_current_raws()
+                self.flagclear = False
+            except:
+                pass
 
     def redo_action(self):
         try:
@@ -519,6 +529,8 @@ class Ui_MainWindow():
             print('Нечего Redить') #TODO Окно / надпись с сообщением о невозможности Redo
 
     def clear_action(self):
+        self.clear_raws = [el for el in self.visible_raws]
+        self.flagclear = True
         for elem in self.visible_raws:
             elem.setParent(None)
         self.visible_raws.clear()
@@ -581,18 +593,6 @@ class DropLabel(QtWidgets.QLabel):
 
     def dropEvent(self, event):
         if event.mimeData().hasImage():
-            # self.qpoint1 = str(event.pos())
-            # self.pos1 = self.qpoint1[20:len(self.qpoint1) - 1]
-            # self.x1, self.y1 = self.pos1.split(', ')
-            # self.x1, self.y1 = int(self.x1), int(self.y1)  # достали координаты drop из объекта PyQt5.QtCore.QPoint(x, y)
-            # print("Координаты дропа:", self.x1, self.y1)
-
-            # self.qpoint2 = str(event.source().drag_start_position)
-            # self.pos2 = self.qpoint2[20:len(self.qpoint2) - 1]
-            # self.x2, self.y2 = self.pos2.split(', ')
-            # self.x2, self.y2 = int(self.x2), int(self.y2)  # достали координаты drop из объекта PyQt5.QtCore.QPoint(x, y)
-            # print("Координаты драга:", self.x2, self.y2)
-
             position = event.pos() - ui.label_raw_main.drag_start_position - ui.label_raw_main.correction
             # ui.frame_progress.move(event.pos())
             # ui.frame_progress.raise_()
