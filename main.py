@@ -348,6 +348,8 @@ class Ui_MainWindow():
 
         # Весь новый код только ниже! -------------------------------
 
+        self.progressBar.setValue(0)
+
         # Droppable label, можно заметить при перетягивании сыринки патент готов к дропу
         # Но не прописано нормальное действие по дропу, возникли трудности
         self.patent = DropLabel(self.frame_patent)
@@ -448,6 +450,7 @@ class Ui_MainWindow():
         self.visible_raws = []
         self.invisible_raws = []
         self.flag_clear = False
+        self.current_required_level = 100 #пока что так, потом обработать, что без кнопки ассерт ничего не начинается
 
     # Поворот сырья направо
     def turn_right(self):
@@ -520,6 +523,7 @@ class Ui_MainWindow():
                 self.flag_clear = False
             except:
                 pass
+        self.progress()
 
     def redo_action(self):
         try:
@@ -528,6 +532,7 @@ class Ui_MainWindow():
             self.show_current_raws()
         except IndexError:
             print('Нечего Redить') #TODO Окно / надпись с сообщением о невозможности Redo
+        self.progress()
 
     def clear_action(self):
         self.clear_raws = [el for el in self.visible_raws]
@@ -536,11 +541,16 @@ class Ui_MainWindow():
             elem.setParent(None)
         self.visible_raws.clear()
         self.invisible_raws.clear()
+        self.progress()
 
     def show_current_raws(self):
         for elem in self.visible_raws:
             elem.setParent(self.frame_patent)
             elem.show()
+
+
+    def progress(self):
+        self.progressBar.setValue(int(len(self.visible_raws) / self.current_required_level * 100))
 
 
 class DraggableLabel(QtWidgets.QLabel):
@@ -607,6 +617,7 @@ class DropLabel(QtWidgets.QLabel):
             # self.new_raw.show()
             ui.visible_raws.append(self.new_raw)
             ui.show_current_raws()
+            ui.progress()
             # self.setPixmap(QPixmap.fromImage(QImage(event.mimeData().imageData())))
 
 
