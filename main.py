@@ -444,13 +444,13 @@ class Ui_MainWindow():
     def __init__(self):
         self.image_raw_main = QImage('a.png')  # Переменная для текущего изображения в выбранном сырье
         self.angle = 0
-        self.game1 = Game(1, 'Championat 28.02.2020', 'Easy', 59)
+        self.game1 = Game(1, 'Championat 28.02.2020', 'Easy')
         self.current_game = self.game1
         self.data = {self.game1.name: self.game1}
         self.visible_raws = []
         self.invisible_raws = []
         self.flag_clear = False
-        self.current_required_level = 100 #пока что так, потом обработать, что без кнопки ассерт ничего не начинается
+        self.current_required_level = 100  # пока что так, потом обработать, что без кнопки ассерт ничего не начинается
 
     # Поворот сырья направо
     def turn_right(self):
@@ -505,7 +505,6 @@ class Ui_MainWindow():
         self.label_N4.setPixmap(QPixmap(QImage(self.current_game.path + '/n4.png')))
         self.label_N5.setPixmap(QPixmap(QImage(self.current_game.path + '/n5.png')))
         self.label_N6.setPixmap(QPixmap(QImage(self.current_game.path + '/n6.png')))
-        self.current_required_level = self.current_game.required_level
         # пока что не обработано колесико для выбора желаемого уровня
 
     def undo_action(self):
@@ -514,7 +513,7 @@ class Ui_MainWindow():
                 self.invisible_raws.append(self.visible_raws[-1])
                 self.visible_raws.pop(-1).setParent(None)
             except IndexError:
-                print('Нечего Undить') #TODO Окно / надпись с сообщением о невозможности Undo
+                print('Нечего Undить')  # TODO Окно / надпись с сообщением о невозможности Undo
         if self.flag_clear:
             try:
                 for i in range(len(self.clear_raws)):
@@ -532,7 +531,7 @@ class Ui_MainWindow():
             self.invisible_raws.pop(-1)
             self.show_current_raws()
         except IndexError:
-            print('Нечего Redить') #TODO Окно / надпись с сообщением о невозможности Redo
+            print('Нечего Redить')  # TODO Окно / надпись с сообщением о невозможности Redo
         self.progress()
 
     def clear_action(self):
@@ -549,9 +548,9 @@ class Ui_MainWindow():
             elem.setParent(self.frame_patent)
             elem.show()
 
-
     def progress(self):
-        self.progressBar.setValue(int(2*len(self.visible_raws) / self.current_required_level * 100))
+        self.progressBar.setValue(int(2 * len(self.visible_raws) / self.current_required_level * 100))  # 2 * длину,
+        # т.к. каждая сыринка это 2 уровня обычно
 
 
 class DraggableLabel(QtWidgets.QLabel):
