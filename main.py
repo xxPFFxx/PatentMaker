@@ -444,7 +444,7 @@ class Ui_MainWindow():
     def __init__(self):
         self.image_raw_main = QImage('a.png')  # Переменная для текущего изображения в выбранном сырье
         self.angle = 0
-        self.game1 = Game(1, 'Championat 28.02.2020', 'Easy')
+        self.game1 = Game(1, 'Championat 28.02.2020', 'Easy', 59)
         self.current_game = self.game1
         self.data = {self.game1.name: self.game1}
         self.visible_raws = []
@@ -505,6 +505,7 @@ class Ui_MainWindow():
         self.label_N4.setPixmap(QPixmap(QImage(self.current_game.path + '/n4.png')))
         self.label_N5.setPixmap(QPixmap(QImage(self.current_game.path + '/n5.png')))
         self.label_N6.setPixmap(QPixmap(QImage(self.current_game.path + '/n6.png')))
+        self.current_required_level = self.current_game.required_level
         # пока что не обработано колесико для выбора желаемого уровня
 
     def undo_action(self):
@@ -550,7 +551,7 @@ class Ui_MainWindow():
 
 
     def progress(self):
-        self.progressBar.setValue(int(len(self.visible_raws) / self.current_required_level * 100))
+        self.progressBar.setValue(int(2*len(self.visible_raws) / self.current_required_level * 100))
 
 
 class DraggableLabel(QtWidgets.QLabel):
