@@ -6,7 +6,7 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QPushButton, QLabel
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QPushButton, QLabel, QMessageBox
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import QTransform, QPixmap, QImage, QDrag, QPixmap, QPainter, QCursor
@@ -511,7 +511,6 @@ class Ui_MainWindow():
         self.label_N5.setPixmap(QPixmap(QImage(self.current_game.path + '/n5.png')))
         self.label_N6.setPixmap(QPixmap(QImage(self.current_game.path + '/n6.png')))
         self.clear_action()
-        # пока что не обработано колесико для выбора желаемого уровня
 
     def undo_action(self):
         if not self.flag_clear:
@@ -559,9 +558,13 @@ class Ui_MainWindow():
             self.progressBar.setValue(int(2 * len(self.visible_raws) / self.current_required_level * 100))  # 2 * длину,
         # т.к. каждая сыринка это 2 уровня обычно
         except ZeroDivisionError:
-            pass #TODO Сообщение о невозможности нулевого уровня (там деление на 0 происходит)
-
-
+            msg = QMessageBox()
+            msg.setWindowTitle("Warning")
+            msg.setText("Level must be more than zero. Level was set to 50 by default.")
+            msg.setIcon(QMessageBox.Warning)
+            x = msg.exec_()
+            self.current_required_level = 50
+            self.progressBar.setValue(int(2 * len(self.visible_raws) / self.current_required_level * 100))
 class DraggableLabel(QtWidgets.QLabel):
     def __init__(self, parent, image):
         super(QtWidgets.QLabel, self).__init__(parent)
