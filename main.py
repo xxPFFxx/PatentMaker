@@ -401,6 +401,10 @@ class Ui_MainWindow():
         self.button_redo.clicked.connect(self.redo_action)
         self.button_clear.clicked.connect(self.clear_action)
 
+        # Настройка срабатываний shortcut'ов
+        self.actionUndo.triggered.connect(lambda: self.undo_action())
+        self.actionRedo.triggered.connect(lambda: self.redo_action())
+
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "PatentMaker 1.0"))
