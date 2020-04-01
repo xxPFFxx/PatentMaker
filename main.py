@@ -184,7 +184,7 @@ class Ui_MainWindow():
         self.label_B = ClickableLabel(self.frame_raw_basic)
         self.label_B.setGeometry(QtCore.QRect(150, 50, 50, 87))
         self.label_B.setText("")
-        self.label_B.setPixmap(QtGui.QPixmap(self.current_game.path + '/b1.png'))
+        self.label_B.setPixmap(QtGui.QPixmap(self.current_game.path + '/b.png'))
         self.label_B.setScaledContents(True)
         self.label_B.setObjectName("label_B")
         self.label_D = ClickableLabel(self.frame_raw_basic)
@@ -287,12 +287,12 @@ class Ui_MainWindow():
         self.frame_patent.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_patent.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_patent.setObjectName("frame_patent")
-        # self.patent = QtWidgets.QLabel(self.frame_patent)
-        # self.patent.setGeometry(QtCore.QRect(0, 0, 721, 761))
-        # self.patent.setText("")
-        # self.patent.setPixmap(QtGui.QPixmap("b.png"))
-        # self.patent.setScaledContents(True)
-        # self.patent.setObjectName("patent")
+        self.patent = QtWidgets.QLabel(self.frame_patent)
+        self.patent.setGeometry(QtCore.QRect(0, 0, 721, 761))
+        self.patent.setText("")
+        self.patent.setPixmap(QtGui.QPixmap("b.png"))
+        self.patent.setScaledContents(True)
+        self.patent.setObjectName("patent")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1340, 21))
@@ -370,7 +370,7 @@ class Ui_MainWindow():
 
         # Обновление выбранного сырья при нажатии
         self.label_A.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/a.png'))
-        self.label_B.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/b1.png'))
+        self.label_B.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/b.png'))
         self.label_C.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/c.png'))
         self.label_D.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/d.png'))
         self.label_E.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/e.png'))
@@ -409,7 +409,7 @@ class Ui_MainWindow():
         self.button_undo.setText(_translate("MainWindow", "Undo ↶"))
         self.button_redo.setText(_translate("MainWindow", "Redo ↷"))
         self.patentbox.setItemText(0, _translate("MainWindow", self.game1.name))
-        self.patentbox.setItemText(1, _translate("MainWindow", "Patent2"))
+        self.patentbox.setItemText(1, _translate("MainWindow", self.game2.name))
         self.label_lvl.setText(_translate("MainWindow", "Required level"))
         self.name_patent.setText(_translate("MainWindow", self.current_game.name))
         self.label_difficulty.setText(_translate("MainWindow", "Difficulty: " + self.current_game.difficulty))
@@ -445,8 +445,9 @@ class Ui_MainWindow():
         self.image_raw_main = QImage('a.png')  # Переменная для текущего изображения в выбранном сырье
         self.angle = 0
         self.game1 = Game(1, 'Championat 28.02.2020', 'Easy')
+        self.game2 = Game(2, "Training 27.02.2020", "Medium")
         self.current_game = self.game1
-        self.data = {self.game1.name: self.game1}
+        self.data = {self.game1.name: self.game1, self.game2.name: self.game2}
         self.visible_raws = []
         self.invisible_raws = []
         self.flag_clear = False
@@ -494,7 +495,7 @@ class Ui_MainWindow():
         self.current_required_level = self.spin_lvl.value()
         self.label_difficulty.setText("Difficulty: " + self.current_game.difficulty)
         self.label_A.setPixmap(QPixmap(QImage(self.current_game.path + '/a.png')))
-        self.label_B.setPixmap(QPixmap(QImage(self.current_game.path + '/b1.png')))
+        self.label_B.setPixmap(QPixmap(QImage(self.current_game.path + '/b.png')))
         self.label_C.setPixmap(QPixmap(QImage(self.current_game.path + '/c.png')))
         self.label_D.setPixmap(QPixmap(QImage(self.current_game.path + '/d.png')))
         self.label_E.setPixmap(QPixmap(QImage(self.current_game.path + '/e.png')))
