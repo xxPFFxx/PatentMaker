@@ -506,6 +506,7 @@ class Ui_MainWindow():
         self.label_N4.setPixmap(QPixmap(QImage(self.current_game.path + '/n4.png')))
         self.label_N5.setPixmap(QPixmap(QImage(self.current_game.path + '/n5.png')))
         self.label_N6.setPixmap(QPixmap(QImage(self.current_game.path + '/n6.png')))
+        self.clear_action()
         # пока что не обработано колесико для выбора желаемого уровня
 
     def undo_action(self):
@@ -550,8 +551,11 @@ class Ui_MainWindow():
             elem.show()
 
     def progress(self):
-        self.progressBar.setValue(int(2 * len(self.visible_raws) / self.current_required_level * 100))  # 2 * длину,
+        try:
+            self.progressBar.setValue(int(2 * len(self.visible_raws) / self.current_required_level * 100))  # 2 * длину,
         # т.к. каждая сыринка это 2 уровня обычно
+        except ZeroDivisionError:
+            pass #TODO Сообщение о невозможности нулевого уровня (там деление на 0 происходит)
 
 
 class DraggableLabel(QtWidgets.QLabel):
