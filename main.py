@@ -421,7 +421,7 @@ class Ui_MainWindow():
         self.label_time1.setText(_translate("MainWindow", " Времени прошло:"))
         self.label_time2.setText(_translate("MainWindow", " Времени осталось:"))
         self.label_clock1.setText(_translate("MainWindow", "0:00:00"))
-        self.label_clock2.setText(_translate("MainWindow", "0:59:59"))
+        self.label_clock2.setText(_translate("MainWindow", "0:00:00"))
         self.label_basic.setText(_translate("MainWindow", "Basic"))
         self.label_add.setText(_translate("MainWindow", "Additional"))
         self.label_active.setText(_translate("MainWindow", "Active"))
@@ -459,7 +459,7 @@ class Ui_MainWindow():
 
 
 
-    #timerpassed block
+    #timer block
     def timeToSec(self, text_time):
         text_time = [int(el) for el in text_time.split(':')]
         time_in_sec = text_time[0]*60*60 + text_time[1]*60 + text_time[2]
@@ -491,11 +491,13 @@ class Ui_MainWindow():
     def showTime(self):
         time = QTime.currentTime()
         text = time.toString()
-        secs_passed = self.timeToSec(text) - self.timeToSec(self.text1)
+        secs_passed = self.timeToSec(text) - self.timeToSec(self.text_start)
         time_passed = self.fromSecToTime(secs_passed)
+        time_remaining = self.fromSecToTime(self.time_remaining_secs - secs_passed)
         self.label_clock1.setText(time_passed)
+        self.label_clock2.setText(time_remaining)
 
-    # # # # #
+    # # # # # # # # # # # # # # # # # #
 
     # Поворот сырья направо
     def turn_right(self):
@@ -552,15 +554,13 @@ class Ui_MainWindow():
         self.label_N6.setPixmap(QPixmap(QImage(self.current_game.path + '/n6.png')))
         self.clear_action()
         # start time
-        self.time1 = QTime.currentTime()
-        self.text1 = self.time1.toString()
+        self.time_start = QTime.currentTime()
+        self.text_start = self.time_start.toString()
+        self.time_remaining_secs = 30 * 60  # 30 minutes
         #timer
         self.timer = QTimer()
         self.timer.timeout.connect(self.showTime)
         self.timer.start(1000)
-        self.showTime()
-        self.label_clock1.show()
-
 
 
     def undo_action(self):
