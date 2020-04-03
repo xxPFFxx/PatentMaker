@@ -456,10 +456,56 @@ class Ui_MainWindow():
         self.invisible_raws = []
         self.flag_clear = False
         self.current_required_level = 100  # пока что так, потом обработать, что без кнопки ассерт ничего не начинается
+        self.time_remaining_secs = 0 # надо, чтобы запустить (иначе драг лейбл крашнется, тк не найдет этого поля)
+        self.secs_passed = 0 # аналогично
+
 
 
 
     #timer block
+    def popupFail(self):
+        msg = QMessageBox()
+        msg.setWindowTitle('Time is over!')
+        msg.setText('Время закончилось! Патентная палата закрывается, но вы можете продлить время её работы еще на '
+                    '10 минут. \nYes - Добавить 10 минут. \nReset - Удалить все наработки. \n'
+                    'Ignore - Установить безлимитное время разработки.')
+        msg.setIcon(QMessageBox.Warning)
+        msg.setStandardButtons(QMessageBox.Yes | QMessageBox.Reset | QMessageBox.Ignore)
+        msg.setDetailedText('При выборе безлимитного времени в правом верхнем углу появится текущее время. Чтобы '
+                            'вернуться к разработке на время, требуется выбрать параметры и нажать кнопку "Accept".')
+        msg.setDefaultButton(QMessageBox.Yes)
+        msg.buttonClicked.connect(self.popup_button)
+        x = msg.exec_()
+
+    def popup_button(self, el):
+        time_click = QTime.currentTime()
+        secs_click = self.timeToSec(time_click.toString())
+        difference = secs_click - self.secs_fail
+        self.timer.stop()
+        self.secs_start += difference  #корректировка времени пока пользователь "думал над кликом"
+
+        button = el.text()
+        if button == 'Ignore':
+            self.label_time2.setText(" Текущее время")
+            self.timer.timeout.connect(self.showCurrentTime)
+            self.timer.start(1000)
+        elif button == 'Reset':
+            self.clear_action()
+            self.label_clock1.setText("0:00:00")
+            self.label_clock2.setText("0:00:00")
+        elif button == '&Yes':
+            self.time_remaining_secs += 10 * 60
+            self.timer.timeout.connect(self.showTime)
+            self.timer.start(1000)
+
+    def showCurrentTime(self):
+        time = QTime.currentTime()
+        text = time.toString()
+        if (time.second() % 2) == 0:
+            text = text[:2] + ' ' + text[3:5] + ' ' + text[6:]
+        self.label_clock2.setText(text)
+
+
     def timeToSec(self, text_time):
         text_time = [int(el) for el in text_time.split(':')]
         time_in_sec = text_time[0]*60*60 + text_time[1]*60 + text_time[2]
@@ -491,11 +537,15 @@ class Ui_MainWindow():
     def showTime(self):
         time = QTime.currentTime()
         text = time.toString()
-        secs_passed = self.timeToSec(text) - self.timeToSec(self.text_start)
-        time_passed = self.fromSecToTime(secs_passed)
-        time_remaining = self.fromSecToTime(self.time_remaining_secs - secs_passed)
+        self.secs_passed = self.timeToSec(text) - self.secs_start
+        time_passed = self.fromSecToTime(self.secs_passed)
+        time_remaining = self.fromSecToTime(self.time_remaining_secs - self.secs_passed)
         self.label_clock1.setText(time_passed)
         self.label_clock2.setText(time_remaining)
+        if self.time_remaining_secs - self.secs_passed == 0:
+            time_fail = QTime.currentTime()
+            self.secs_fail = self.timeToSec(time_fail.toString())
+            self.popupFail()
 
     # # # # # # # # # # # # # # # # # #
 
@@ -556,11 +606,13 @@ class Ui_MainWindow():
         # start time
         self.time_start = QTime.currentTime()
         self.text_start = self.time_start.toString()
-        self.time_remaining_secs = 30 * 60  # 30 minutes
+        self.secs_start = self.timeToSec(self.text_start)
+        self.time_remaining_secs = 30*60  # время на изготовку патента в секундах
         #timer
         self.timer = QTimer()
         self.timer.timeout.connect(self.showTime)
         self.timer.start(1000)
+        self.label_time2.setText(' Времени осталось:') #надо, просто надо
 
 
     def undo_action(self):
@@ -638,7 +690,6 @@ class DraggableLabel(QtWidgets.QLabel):
             return
         if (event.pos() - self.drag_start_position).manhattanLength() < 2:
             self.correction = event.pos() - self.drag_start_position
-
         drag = QDrag(self)
 
         # QMimeData() - класс для хранения данных любого типа во время перетягивания
@@ -683,6 +734,7 @@ class DraggableLabel(QtWidgets.QLabel):
         drag.exec_(Qt.CopyAction | Qt.MoveAction)
 
 
+
         # можно как то менять фон, возможно есть в этом ключ
         # newfont = QFont("Consolas", 120, QFont.Bold)
         # self.setStyleSheet("background:transparent;")
@@ -705,6 +757,12 @@ class DropLabel(QtWidgets.QLabel):
             event.accept()
         else:
             event.ignore()
+
+    # def dragMoveEvent(self, event):
+    #     print(ui.time_remaining_secs - ui.secs_passed)
+    #     if ui.time_remaining_secs - ui.secs_passed == 1:
+    #         return
+
 
     def dropEvent(self, event):
         if event.mimeData().hasImage():
