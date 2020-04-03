@@ -13,7 +13,7 @@ from PyQt5.QtGui import QTransform, QPixmap, QImage, QDrag, QPixmap, QPainter, Q
 from ClickableLabel import ClickableLabel
 from Rules import Window_rules
 from Game import Game
-from PyQt5.QtCore import QMimeData, Qt, QRect, QTimer
+from PyQt5.QtCore import QMimeData, Qt, QRect, QTimer, QTime
 
 
 class Ui_MainWindow():
@@ -348,7 +348,6 @@ class Ui_MainWindow():
 
         # Весь новый код только ниже! -------------------------------
 
-
         self.progressBar.setValue(0)
 
         # Droppable label, можно заметить при перетягивании сыринки патент готов к дропу
@@ -459,6 +458,45 @@ class Ui_MainWindow():
         self.current_required_level = 100  # пока что так, потом обработать, что без кнопки ассерт ничего не начинается
 
 
+
+    #timerpassed block
+    def timeToSec(self, text_time):
+        text_time = [int(el) for el in text_time.split(':')]
+        time_in_sec = text_time[0]*60*60 + text_time[1]*60 + text_time[2]
+        return time_in_sec
+
+    def fromSecToTime(self, secs):
+        hours = secs // 3600
+        secs = secs - (hours * 3600)
+        #hours = self.addzero(hours)
+
+        minutes = secs // 60
+        minutes = self.addzero(minutes)
+
+        sec = secs % 60
+        sec = self.addzero(sec)
+
+        newtime = str(hours) + ':' + minutes + ':' + sec
+        return newtime
+
+
+    def addzero(self, number):
+        if number < 10:
+            number = '0' + str(number)
+        else:
+            number = str(number)
+        return number
+
+
+    def showTime(self):
+        time = QTime.currentTime()
+        text = time.toString()
+        secs_passed = self.timeToSec(text) - self.timeToSec(self.text1)
+        time_passed = self.fromSecToTime(secs_passed)
+        self.label_clock1.setText(time_passed)
+
+    # # # # #
+
     # Поворот сырья направо
     def turn_right(self):
         self.angle += 90
@@ -513,6 +551,17 @@ class Ui_MainWindow():
         self.label_N5.setPixmap(QPixmap(QImage(self.current_game.path + '/n5.png')))
         self.label_N6.setPixmap(QPixmap(QImage(self.current_game.path + '/n6.png')))
         self.clear_action()
+        # start time
+        self.time1 = QTime.currentTime()
+        self.text1 = self.time1.toString()
+        #timer
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.showTime)
+        self.timer.start(1000)
+        self.showTime()
+        self.label_clock1.show()
+
+
 
     def undo_action(self):
         if not self.flag_clear:
@@ -567,6 +616,9 @@ class Ui_MainWindow():
             x = msg.exec_()
             self.current_required_level = 50
             self.progressBar.setValue(int(2 * len(self.visible_raws) / self.current_required_level * 100))
+
+
+
 
 class DraggableLabel(QtWidgets.QLabel):
     def __init__(self, parent, image):
