@@ -9,11 +9,11 @@
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QPushButton, QLabel, QMessageBox
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtGui import QTransform, QPixmap, QImage, QDrag, QPixmap, QPainter, QCursor
+from PyQt5.QtGui import QTransform, QPixmap, QImage, QDrag, QPixmap, QPainter, QCursor, QFont, QBrush, QPen, QColor
 from ClickableLabel import ClickableLabel
 from Rules import Window_rules
 from Game import Game
-from PyQt5.QtCore import QMimeData, Qt, QRect
+from PyQt5.QtCore import QMimeData, Qt, QRect, QTimer
 
 
 class Ui_MainWindow():
@@ -348,6 +348,7 @@ class Ui_MainWindow():
 
         # Весь новый код только ниже! -------------------------------
 
+
         self.progressBar.setValue(0)
 
         # Droppable label, можно заметить при перетягивании сыринки патент готов к дропу
@@ -457,6 +458,7 @@ class Ui_MainWindow():
         self.flag_clear = False
         self.current_required_level = 100  # пока что так, потом обработать, что без кнопки ассерт ничего не начинается
 
+
     # Поворот сырья направо
     def turn_right(self):
         self.angle += 90
@@ -565,15 +567,18 @@ class Ui_MainWindow():
             x = msg.exec_()
             self.current_required_level = 50
             self.progressBar.setValue(int(2 * len(self.visible_raws) / self.current_required_level * 100))
+
 class DraggableLabel(QtWidgets.QLabel):
     def __init__(self, parent, image):
         super(QtWidgets.QLabel, self).__init__(parent)
         self.setPixmap(QPixmap(image))
+
         self.show()
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
             self.drag_start_position = event.pos()
+
 
     def mouseMoveEvent(self, event):
         # перетягивание на левую кнопку мыши + установка минимальной длины для начала перетягивания (4 пикселя)
@@ -587,20 +592,55 @@ class DraggableLabel(QtWidgets.QLabel):
         # QMimeData() - класс для хранения данных любого типа во время перетягивания
         mimedata = QMimeData()
 
-        mimedata.setImageData(
-            self.pixmap().toImage())  # изображение в качестве данных, которое потом можно будет дропнуть
+        mimedata.setImageData(self.pixmap().toImage())  # изображение в качестве данных, которое потом можно будет дропнуть
 
         drag.setMimeData(mimedata)
 
         pixmap = QPixmap(self.size())
-        # painter - рисование изображения во время перетягивания
+
+
+        # способ пять
+        #pixmap.setMask(pixmap.createHeuristicMask())
+
+
+        # painter - рисование изобpражения во время перетягивания
         painter = QPainter(pixmap)
+
+        # способ два три четыре
+        # painter.setRenderHint(QPainter.Antialiasing, True)
+        # painter.setRenderHint(QPainter.HighQualityAntialiasing, True)
+        # painter.setRenderHint(QPainter.SmoothPixmapTransform, True)
+        # painter.setPen(QPen(QBrush(Qt.transparent), 0))
+        # painter.setBrush(QBrush(Qt.transparent))
+
+
+        # способ раз и он же самый главный
+        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
+        self.setStyleSheet("background:transparent;")
+
+        # уже не помню откуда это
+        #painter.fillRect(pixmap.rect(), QColor(0, 0, 0, 0));
+
+
         painter.drawPixmap(self.rect(), self.grab())
         painter.end()
 
         drag.setPixmap(pixmap)
         drag.setHotSpot(event.pos() - self.rect().topLeft())
         drag.exec_(Qt.CopyAction | Qt.MoveAction)
+
+
+        # можно как то менять фон, возможно есть в этом ключ
+        # newfont = QFont("Consolas", 120, QFont.Bold)
+        # self.setStyleSheet("background:transparent;")
+        # self.setFont(newfont)
+
+
+
+
+
+
 
 
 class DropLabel(QtWidgets.QLabel):
