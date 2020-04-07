@@ -8,7 +8,7 @@
 
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QPushButton, QLabel, QMessageBox
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets, QtTest
 from PyQt5.QtGui import QTransform, QPixmap, QImage, QDrag, QPixmap, QPainter, QCursor, QFont, QBrush, QPen, QColor
 from ClickableLabel import ClickableLabel
 from Rules import Window_rules
@@ -23,6 +23,7 @@ class Ui_MainWindow():
         MainWindow.setDocumentMode(False)
         MainWindow.setDockNestingEnabled(False)
         MainWindow.setUnifiedTitleAndToolBarOnMac(False)
+        MainWindow.setMouseTracking(True) #new
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.frame_edit = QtWidgets.QFrame(self.centralwidget)
@@ -362,8 +363,9 @@ class Ui_MainWindow():
 
         # DRAG (only) raw main
         self.label_raw_main = DraggableLabel(self.frame_active, 'a.png')
-        self.label_raw_main.setGeometry(QtCore.QRect(90, 40, 50, 87))
+        self.label_raw_main.setGeometry(QtCore.QRect(100, 40, 50, 87))
         self.label_raw_main.setText("")
+        self.label_raw_main.setAlignment(Qt.AlignCenter)
         self.label_raw_main.setPixmap(QtGui.QPixmap("a.png"))
         self.label_raw_main.setScaledContents(True)
         self.label_raw_main.setObjectName("label_raw_main")
@@ -381,6 +383,8 @@ class Ui_MainWindow():
         self.label_N4.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/n4.png'))
         self.label_N5.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/n5.png'))
         self.label_N6.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/n6.png'))
+
+
 
         # Добавление кнопки Accept вручную
         self.button_accept = QtWidgets.QPushButton(self.centralwidget)
@@ -404,6 +408,7 @@ class Ui_MainWindow():
         # Настройка срабатываний shortcut'ов
         self.actionUndo.triggered.connect(lambda: self.undo_action())
         self.actionRedo.triggered.connect(lambda: self.redo_action())
+
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -456,8 +461,8 @@ class Ui_MainWindow():
         self.invisible_raws = []
         self.flag_clear = False
         self.current_required_level = 100  # пока что так, потом обработать, что без кнопки ассерт ничего не начинается
-        self.time_remaining_secs = 0 # надо, чтобы запустить (иначе драг лейбл крашнется, тк не найдет этого поля)
-        self.secs_passed = 0 # аналогично
+        # self.time_remaining_secs = 0 # надо, чтобы запустить (иначе драг лейбл крашнется, тк не найдет этого поля)
+        # self.secs_passed = 0 # аналогично
 
 
 
@@ -468,7 +473,7 @@ class Ui_MainWindow():
         msg.setWindowTitle('Time is over!')
         msg.setText('Время закончилось! Патентная палата закрывается, но вы можете продлить время её работы еще на '
                     '10 минут. \nYes - Добавить 10 минут. \nReset - Удалить все наработки. \n'
-                    'Ignore - Установить безлимитное время разработки.')
+                    'Ignore - Установить безлимитное время разработки.\n\nПримечание:\nПри возникновении неполадок в работе программы требуется нажать "Enter"')
         msg.setIcon(QMessageBox.Warning)
         msg.setStandardButtons(QMessageBox.Yes | QMessageBox.Reset | QMessageBox.Ignore)
         msg.setDetailedText('При выборе безлимитного времени в правом верхнем углу появится текущее время. Чтобы '
@@ -476,6 +481,7 @@ class Ui_MainWindow():
         msg.setDefaultButton(QMessageBox.Yes)
         msg.buttonClicked.connect(self.popup_button)
         x = msg.exec_()
+
 
     def popup_button(self, el):
         time_click = QTime.currentTime()
@@ -498,6 +504,7 @@ class Ui_MainWindow():
             self.timer.timeout.connect(self.showTime)
             self.timer.start(1000)
 
+
     def showCurrentTime(self):
         time = QTime.currentTime()
         text = time.toString()
@@ -510,6 +517,7 @@ class Ui_MainWindow():
         text_time = [int(el) for el in text_time.split(':')]
         time_in_sec = text_time[0]*60*60 + text_time[1]*60 + text_time[2]
         return time_in_sec
+
 
     def fromSecToTime(self, secs):
         hours = secs // 3600
@@ -551,30 +559,47 @@ class Ui_MainWindow():
 
     # Поворот сырья направо
     def turn_right(self):
-        self.angle += 90
-        t = QTransform().rotate(90)
-        self.image_raw_main = QPixmap(self.image_raw_main).transformed(t)
-        if (self.angle - 90) % 180 == 0:
-            self.label_raw_main.setGeometry(QtCore.QRect(75, 60, 87, 50))
-        elif self.angle % 180 == 0:
-            self.label_raw_main.setGeometry(QtCore.QRect(90, 40, 50, 87))
-        self.label_raw_main.setPixmap(self.image_raw_main)
+        self.angle += 60
+        t = QTransform().rotate(self.angle)
+        self.label_raw_main.setPixmap(QPixmap(self.image_raw_main).transformed(t))
+        if self.angle % 180 == 60:
+            self.label_raw_main.setGeometry(QtCore.QRect(75, 40, 100, 87))
+        elif self.angle % 180 == 120:
+            self.label_raw_main.setGeometry(QtCore.QRect(75, 40, 100, 87))
+        else:
+            self.label_raw_main.setGeometry(QtCore.QRect(100, 40, 50, 87))
+        # self.image_raw_main = QPixmap(self.image_raw_main).transformed(t)
+        # if (self.angle - 90) % 180 == 0:
+        #     self.label_raw_main.setGeometry(QtCore.QRect(75, 60, 87, 50))
+        # elif self.angle % 180 == 0:
+        #     self.label_raw_main.setGeometry(QtCore.QRect(90, 40, 50, 87))
+        # self.label_raw_main.setPixmap(self.image_raw_main)
 
     # Поворот сырья налево
     def turn_left(self):
-        self.angle -= 90
-        t = QTransform().rotate(-90)
-        self.image_raw_main = QPixmap(self.image_raw_main).transformed(t)
-        if (self.angle - 90) % 180 == 0:
-            self.label_raw_main.setGeometry(QtCore.QRect(75, 60, 87, 50))
-        elif self.angle % 180 == 0:
-            self.label_raw_main.setGeometry(QtCore.QRect(90, 40, 50, 87))
-        self.label_raw_main.setPixmap(self.image_raw_main)
+        self.angle -= 60
+        t = QTransform().rotate(self.angle)
+        if self.angle % 180 == 60:
+            self.label_raw_main.setGeometry(QtCore.QRect(75, 40, 100, 87))
+        elif self.angle % 180 == 120:
+            self.label_raw_main.setGeometry(QtCore.QRect(75, 40, 100, 87))
+        else:
+            self.label_raw_main.setGeometry(QtCore.QRect(100, 40, 50, 87))
+        self.label_raw_main.setPixmap(QPixmap(self.image_raw_main).transformed(t))
+
+
+        # self.image_raw_main = QPixmap(self.image_raw_main).transformed(t)
+        # if (self.angle - 90) % 180 == 0:
+        #     self.label_raw_main.setGeometry(QtCore.QRect(75, 60, 87, 50))
+        # elif self.angle % 180 == 0:
+        #     self.label_raw_main.setGeometry(QtCore.QRect(90, 40, 50, 87))
+        # self.label_raw_main.setPixmap(self.image_raw_main)
 
     # Обновление изображения выбранного сырья
     def update_raw_main_image(self, path):
         self.image_raw_main = QImage(path)
         self.label_raw_main.setPixmap(QPixmap(self.image_raw_main))
+        self.label_raw_main.setGeometry(QtCore.QRect(100, 40, 50, 87))
         self.angle = 0
 
     # Показ окна правил
@@ -669,7 +694,8 @@ class Ui_MainWindow():
             self.current_required_level = 50
             self.progressBar.setValue(int(2 * len(self.visible_raws) / self.current_required_level * 100))
 
-
+    def delete_raw(self):
+        pass
 
 
 class DraggableLabel(QtWidgets.QLabel):
@@ -682,7 +708,6 @@ class DraggableLabel(QtWidgets.QLabel):
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
             self.drag_start_position = event.pos()
-
 
     def mouseMoveEvent(self, event):
         # перетягивание на левую кнопку мыши + установка минимальной длины для начала перетягивания (4 пикселя)
@@ -741,12 +766,6 @@ class DraggableLabel(QtWidgets.QLabel):
         # self.setFont(newfont)
 
 
-
-
-
-
-
-
 class DropLabel(QtWidgets.QLabel):
     def __init__(self, parent):
         super().__init__(parent)
@@ -760,27 +779,44 @@ class DropLabel(QtWidgets.QLabel):
 
     # def dragMoveEvent(self, event):
     #     print(ui.time_remaining_secs - ui.secs_passed)
-    #     if ui.time_remaining_secs - ui.secs_passed == 1:
-    #         return
-
+    #     if ui.time_remaining_secs - ui.secs_passed == 1798:
+    #         QtTest.QTest.mouseRelease(event.source(), Qt.LeftButton)
 
     def dropEvent(self, event):
         if event.mimeData().hasImage():
             position = event.pos() - ui.label_raw_main.drag_start_position - ui.label_raw_main.correction
             # ui.frame_progress.move(event.pos())
             # ui.frame_progress.raise_()
-            self.new_raw = QtWidgets.QLabel(ui.frame_patent)
-            if (ui.angle - 90) % 180 == 0:
-                self.new_raw.setGeometry(QtCore.QRect(position.x(), position.y(), 87, 50))
-            elif ui.angle % 180 == 0:
+            self.new_raw = DeletableLabel(ui.frame_patent)
+            if ui.angle % 180 ==  60:
+                self.new_raw.setGeometry(QtCore.QRect(position.x(), position.y(), 100, 87))
+            elif ui.angle % 180 == 120:
+                self.new_raw.setGeometry(QtCore.QRect(position.x(), position.y(), 100, 87))
+            else:
                 self.new_raw.setGeometry(QtCore.QRect(position.x(), position.y(), 50, 87))
-            self.new_raw.setPixmap(QtGui.QPixmap(ui.image_raw_main))
+            t = QTransform().rotate(ui.angle)
+
+            self.new_raw.setPixmap(QPixmap(ui.image_raw_main).transformed(t))
             self.new_raw.setScaledContents(True)
             # self.new_raw.show()
             ui.visible_raws.append(self.new_raw)
             ui.show_current_raws()
             ui.progress()
             # self.setPixmap(QPixmap.fromImage(QImage(event.mimeData().imageData())))
+
+
+class DeletableLabel(QtWidgets.QLabel):
+    clicked = QtCore.pyqtSignal()
+
+    def mousePressEvent(self, QMouseEvent):
+        if QMouseEvent.button() == QtCore.Qt.RightButton:
+            self.clicked.emit()
+            QtWidgets.QLabel.mousePressEvent(self, QMouseEvent)
+            self.setParent(None)
+            n = ui.visible_raws.index(self)
+            ui.invisible_raws.append(ui.visible_raws[n])
+            ui.visible_raws.pop(n).setParent(None)
+
 
 
 if __name__ == "__main__":
@@ -792,3 +828,5 @@ if __name__ == "__main__":
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
+
+#где-то глубоко возможно есть баг связанный с переходом времени через 0:00
