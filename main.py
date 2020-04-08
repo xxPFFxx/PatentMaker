@@ -870,7 +870,7 @@ class Deletable_Draggable_DroppableLabel(QtWidgets.QLabel):
 
     def dropEvent(self, event):
         if event.mimeData().hasImage():
-            if str(type(event.source())) == "<class '__main__.DraggableLabel'>":
+            if str(type(event.source())) == "<class '__main__.DraggableLabel'>": #оставил так, тк в будущем есть идеи по другому отклику на драг уже дропнутых сыринок
                 self.position = event.pos() + self.pos() - drag_start_position - correction
                 self.new_raw = Deletable_Draggable_DroppableLabel(ui.frame_patent)
                 self.rawAngle()
@@ -884,11 +884,6 @@ class Deletable_Draggable_DroppableLabel(QtWidgets.QLabel):
                 t = QTransform().rotate(ui.angle)
                 self.new_raw.setPixmap(QPixmap(ui.image_raw_main).transformed(t))
                 self.new_raw.setScaledContents(True)
-            # print(type(event.source()))
-            # print(self.pos())
-            # print(event.pos())
-            # print(ui.label_raw_main.drag_start_position, ui.label_raw_main.correction)
-
 
             ui.visible_raws.append(self.new_raw)
             ui.show_current_raws()
