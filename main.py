@@ -216,7 +216,7 @@ class Ui_MainWindow():
         self.label_N1 = ClickableLabel(self.frame_raw_add)
         self.label_N1.setGeometry(QtCore.QRect(40, 40, 50, 87))
         self.label_N1.setText("")
-        self.label_N1.setPixmap(QtGui.QPixmap(self.current_game.path + '/n1.png'))
+        self.label_N1.setPixmap(QtGui.QPixmap(self.current_game.path + '/na.png'))
         self.label_N1.setScaledContents(True)
         self.label_N1.setObjectName("label_N1")
         self.label_N3 = ClickableLabel(self.frame_raw_add)
@@ -362,7 +362,7 @@ class Ui_MainWindow():
         self.patent.setObjectName("patent")
 
         # DRAG (only) raw main
-        self.label_raw_main = DraggableLabel(self.frame_active, 'a.png')
+        self.label_raw_main = DraggableLabel(self.frame_active)
         self.label_raw_main.setGeometry(QtCore.QRect(100, 40, 50, 87))
         self.label_raw_main.setText("")
         self.label_raw_main.setAlignment(Qt.AlignCenter)
@@ -377,7 +377,7 @@ class Ui_MainWindow():
         self.label_D.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/d.png'))
         self.label_E.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/e.png'))
         self.label_F.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/f.png'))
-        self.label_N1.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/n1.png'))
+        self.label_N1.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/na.png'))
         self.label_N2.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/n2.png'))
         self.label_N3.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/n3.png'))
         self.label_N4.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/n4.png'))
@@ -621,7 +621,7 @@ class Ui_MainWindow():
         self.label_D.setPixmap(QPixmap(QImage(self.current_game.path + '/d.png')))
         self.label_E.setPixmap(QPixmap(QImage(self.current_game.path + '/e.png')))
         self.label_F.setPixmap(QPixmap(QImage(self.current_game.path + '/f.png')))
-        self.label_N1.setPixmap(QPixmap(QImage(self.current_game.path + '/n1.png')))
+        self.label_N1.setPixmap(QPixmap(QImage(self.current_game.path + '/na.png')))
         self.label_N2.setPixmap(QPixmap(QImage(self.current_game.path + '/n2.png')))
         self.label_N3.setPixmap(QPixmap(QImage(self.current_game.path + '/n3.png')))
         self.label_N4.setPixmap(QPixmap(QImage(self.current_game.path + '/n4.png')))
@@ -699,10 +699,8 @@ class Ui_MainWindow():
 
 
 class DraggableLabel(QtWidgets.QLabel):
-    def __init__(self, parent, image):
+    def __init__(self, parent):
         super(QtWidgets.QLabel, self).__init__(parent)
-        self.setPixmap(QPixmap(image))
-
         self.show()
 
     def mousePressEvent(self, event):
@@ -724,46 +722,38 @@ class DraggableLabel(QtWidgets.QLabel):
 
         drag.setMimeData(mimedata)
 
-        pixmap = QPixmap(self.size())
 
+        pixmap = QPixmap(ui.image_raw_main)
+        pixmap = pixmap.scaled(self.size())
 
-        # способ пять
-        #pixmap.setMask(pixmap.createHeuristicMask())
-
-
-        # painter - рисование изобpражения во время перетягивания
         painter = QPainter(pixmap)
 
+        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
+        self.setStyleSheet("background:transparent;")
+
+        painter.drawPixmap(self.rect(), self.grab())
+        painter.end()
+
+        drag.setPixmap(pixmap)  #именно здесь происходит прорисовка изображения, работает и без QPainter, но
+        # Но он помогает восстановить качество картинки (повреждено из за метода scaled)
+        drag.setHotSpot(event.pos() - self.rect().topLeft())
+        drag.exec_(Qt.CopyAction | Qt.MoveAction)
+
+
+
+
+        #другие способы прозрачности изображения (возможно пригодится в будущем):
         # способ два три четыре
         # painter.setRenderHint(QPainter.Antialiasing, True)
         # painter.setRenderHint(QPainter.HighQualityAntialiasing, True)
         # painter.setRenderHint(QPainter.SmoothPixmapTransform, True)
         # painter.setPen(QPen(QBrush(Qt.transparent), 0))
         # painter.setBrush(QBrush(Qt.transparent))
-
-
-        # способ раз и он же самый главный
-        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
-        self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
-        self.setStyleSheet("background:transparent;")
-
+        # способ пять
+        # pixmap.setMask(pixmap.createHeuristicMask())
         # уже не помню откуда это
-        #painter.fillRect(pixmap.rect(), QColor(0, 0, 0, 0));
-
-
-        painter.drawPixmap(self.rect(), self.grab())
-        painter.end()
-
-        drag.setPixmap(pixmap)
-        drag.setHotSpot(event.pos() - self.rect().topLeft())
-        drag.exec_(Qt.CopyAction | Qt.MoveAction)
-
-
-
-        # можно как то менять фон, возможно есть в этом ключ
-        # newfont = QFont("Consolas", 120, QFont.Bold)
-        # self.setStyleSheet("background:transparent;")
-        # self.setFont(newfont)
+        # painter.fillRect(pixmap.rect(), QColor(0, 0, 0, 0));
 
 
 class DropLabel(QtWidgets.QLabel):
