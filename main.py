@@ -706,6 +706,8 @@ class DraggableLabel(QtWidgets.QLabel):
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
+            global drag_start_position
+            drag_start_position = event.pos()
             self.drag_start_position = event.pos()
 
     def mouseMoveEvent(self, event):
@@ -713,7 +715,8 @@ class DraggableLabel(QtWidgets.QLabel):
         if not (event.buttons() & Qt.LeftButton):
             return
         if (event.pos() - self.drag_start_position).manhattanLength() < 2:
-            self.correction = event.pos() - self.drag_start_position
+            global correction
+            correction = event.pos() - self.drag_start_position
         drag = QDrag(self)
 
         # QMimeData() - класс для хранения данных любого типа во время перетягивания
@@ -777,10 +780,13 @@ class DropLabel(QtWidgets.QLabel):
 
     def dropEvent(self, event):
         if event.mimeData().hasImage():
-            position = event.pos() - ui.label_raw_main.drag_start_position - ui.label_raw_main.correction
+            # print(event.source())
+            # print(event.pos())
+            # print(ui.label_raw_main.drag_start_position, ui.label_raw_main.correction)
+            position = event.pos() - drag_start_position - correction
             # ui.frame_progress.move(event.pos())
             # ui.frame_progress.raise_()
-            self.new_raw = DeletableLabel(ui.frame_patent)
+            self.new_raw = Deletable_Draggable_DroppableLabel(ui.frame_patent)
             if ui.angle % 180 ==  60:
                 self.new_raw.setGeometry(QtCore.QRect(position.x(), position.y(), 100, 87))
             elif ui.angle % 180 == 120:
@@ -798,8 +804,13 @@ class DropLabel(QtWidgets.QLabel):
             # self.setPixmap(QPixmap.fromImage(QImage(event.mimeData().imageData())))
 
 
-class DeletableLabel(QtWidgets.QLabel):
+class Deletable_Draggable_DroppableLabel(QtWidgets.QLabel):
     clicked = QtCore.pyqtSignal()
+
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.setAcceptDrops(True)
+        self.show()
 
     def mousePressEvent(self, QMouseEvent):
         if QMouseEvent.button() == QtCore.Qt.RightButton:
@@ -809,7 +820,100 @@ class DeletableLabel(QtWidgets.QLabel):
             n = ui.visible_raws.index(self)
             ui.invisible_raws.append(ui.visible_raws[n])
             ui.visible_raws.pop(n).setParent(None)
+        if QMouseEvent.button() == Qt.LeftButton:
+            global drag_start_position
+            drag_start_position = QMouseEvent.pos()
+            self.drag_start_position = QMouseEvent.pos()
 
+
+    def mouseMoveEvent(self, event):
+        if not (event.buttons() & Qt.LeftButton):
+            return
+        if (event.pos() - self.drag_start_position).manhattanLength() < 2:
+            global correction
+            correction = event.pos() - self.drag_start_position
+        drag = QDrag(self)
+        mimedata = QMimeData()
+        mimedata.setImageData(self.pixmap().toImage())  # изображение в качестве данных, которое потом можно будет дропнуть
+
+        drag.setMimeData(mimedata)
+
+        t = QTransform().rotate(ui.angle)
+        pixmap = QPixmap(ui.image_raw_main.transformed(t))  # Все исправление в 3 строчки
+        pixmap = pixmap.scaled(self.size())
+
+        painter = QPainter(pixmap)
+        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
+        self.setStyleSheet("background:transparent;")
+        painter.drawPixmap(self.rect(), self.grab())
+        painter.end()
+
+        drag.setPixmap(pixmap)
+        drag.setHotSpot(event.pos() - self.rect().topLeft())
+        drag.exec_(Qt.CopyAction | Qt.MoveAction)
+
+    def dragEnterEvent(self, event):
+        if event.mimeData().hasImage():
+            event.accept()
+        else:
+            event.ignore()
+
+    def rawAngle(self):
+        if ui.angle % 180 == 60:
+            self.new_raw.setGeometry(QtCore.QRect(self.position.x(), self.position.y(), 100, 87))
+        elif ui.angle % 180 == 120:
+            self.new_raw.setGeometry(QtCore.QRect(self.position.x(), self.position.y(), 100, 87))
+        else:
+            self.new_raw.setGeometry(QtCore.QRect(self.position.x(), self.position.y(), 50, 87))
+
+
+    def dropEvent(self, event):
+        if event.mimeData().hasImage():
+            if str(type(event.source())) == "<class '__main__.DraggableLabel'>":
+                self.position = event.pos() + self.pos() - drag_start_position - correction
+                self.new_raw = Deletable_Draggable_DroppableLabel(ui.frame_patent)
+                self.rawAngle()
+                t = QTransform().rotate(ui.angle)
+                self.new_raw.setPixmap(QPixmap(ui.image_raw_main).transformed(t))
+                self.new_raw.setScaledContents(True)
+            elif str(type(event.source())) == "<class '__main__.Deletable_Draggable_DroppableLabel'>":
+                self.position = event.pos() + self.pos() - drag_start_position - correction
+                self.new_raw = Deletable_Draggable_DroppableLabel(ui.frame_patent)
+                self.rawAngle()
+                t = QTransform().rotate(ui.angle)
+                self.new_raw.setPixmap(QPixmap(ui.image_raw_main).transformed(t))
+                self.new_raw.setScaledContents(True)
+            # print(type(event.source()))
+            # print(self.pos())
+            # print(event.pos())
+            # print(ui.label_raw_main.drag_start_position, ui.label_raw_main.correction)
+
+
+            ui.visible_raws.append(self.new_raw)
+            ui.show_current_raws()
+            ui.progress()
+
+            # ui.frame_progress.move(event.pos())
+            # ui.frame_progress.raise_()
+            # вариант решения без глобал переменных, но там чето много контролить надо, проблема осталась тут с дропом делдрагдроп на обычный патент, можешь ознакомиться
+            # конечно она решалась с помощью метода event.target() в в дроп лейбле для патента отдельно, но там тоже нужно прописывать свои корректировки как тут ниже
+            # if str(type(event.source())) == "<class '__main__.DraggableLabel'>":
+            #     self.position = event.pos() - ui.label_raw_main.drag_start_position - ui.label_raw_main.correction
+            #     self.new_raw = Deletable_Draggable_DroppableLabel(ui.frame_patent)
+            #     self.rawAngle()
+            #     t = QTransform().rotate(ui.angle)
+            #     self.new_raw.setPixmap(QPixmap(ui.image_raw_main).transformed(t))
+            #     self.new_raw.setScaledContents(True)
+            #
+            # elif str(type(event.source())) == "<class '__main__.Deletable_Draggable_DroppableLabel'>":
+            #     self.position = event.pos() + self.pos() - drag_start_position2 - correction2
+            #     self.new_raw = Deletable_Draggable_DroppableLabel(ui.frame_patent)
+            #     self.rawAngle()
+            #     t = QTransform().rotate(ui.angle)
+            #
+            #     self.new_raw.setPixmap(QPixmap(ui.image_raw_main).transformed(t))
+            #     self.new_raw.setScaledContents(True)
 
 
 if __name__ == "__main__":
