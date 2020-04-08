@@ -588,6 +588,7 @@ class Ui_MainWindow():
         self.label_raw_main.setPixmap(QPixmap(self.image_raw_main).transformed(t))
 
 
+
         # self.image_raw_main = QPixmap(self.image_raw_main).transformed(t)
         # if (self.angle - 90) % 180 == 0:
         #     self.label_raw_main.setGeometry(QtCore.QRect(75, 60, 87, 50))
@@ -722,9 +723,10 @@ class DraggableLabel(QtWidgets.QLabel):
 
         drag.setMimeData(mimedata)
 
-
-        pixmap = QPixmap(ui.image_raw_main)
+        t = QTransform().rotate(ui.angle)
+        pixmap = QPixmap(ui.image_raw_main.transformed(t))  #Все исправление в 3 строчки
         pixmap = pixmap.scaled(self.size())
+
 
         painter = QPainter(pixmap)
 
@@ -736,7 +738,8 @@ class DraggableLabel(QtWidgets.QLabel):
         painter.end()
 
         drag.setPixmap(pixmap)  #именно здесь происходит прорисовка изображения, работает и без QPainter, но
-        # Но он помогает восстановить качество картинки (повреждено из за метода scaled)
+        #Но он помогает восстановить качество картинки, по сути перерисовывая новую картинку поверх старой,
+        #повреждено из за метода scaled. Картинка из этой строчки по сути является фоном, и именно в ней и была проблема
         drag.setHotSpot(event.pos() - self.rect().topLeft())
         drag.exec_(Qt.CopyAction | Qt.MoveAction)
 
