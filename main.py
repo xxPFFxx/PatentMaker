@@ -473,7 +473,8 @@ class Ui_MainWindow():
         msg.setWindowTitle('Time is over!')
         msg.setText('Время закончилось! Патентная палата закрывается, но вы можете продлить время её работы еще на '
                     '10 минут. \nYes - Добавить 10 минут. \nReset - Удалить все наработки. \n'
-                    'Ignore - Установить безлимитное время разработки.\n\nПримечание:\nПри возникновении неполадок в работе программы требуется нажать "Enter"')
+                    'Ignore - Установить безлимитное время разработки.\n\nПримечание:\nПри возникновении неполадок в '
+                    'работе программы требуется нажать "Enter"')
         msg.setIcon(QMessageBox.Warning)
         msg.setStandardButtons(QMessageBox.Yes | QMessageBox.Reset | QMessageBox.Ignore)
         msg.setDetailedText('При выборе безлимитного времени в правом верхнем углу появится текущее время. Чтобы '
@@ -833,6 +834,7 @@ class Deletable_Draggable_DroppableLabel(QtWidgets.QLabel):
             n = ui.visible_raws.index(self)
             ui.invisible_raws.append(ui.visible_raws[n])
             ui.visible_raws.pop(n).setParent(None)
+            ui.progressBar.setValue(int(2 * len(ui.visible_raws) / ui.current_required_level * 100))
         if QMouseEvent.button() == Qt.LeftButton:
             global drag_start_position
             drag_start_position = QMouseEvent.pos()
