@@ -377,7 +377,7 @@ class Ui_MainWindow():
         self.label_D.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/d.png'))
         self.label_E.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/e.png'))
         self.label_F.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/f.png'))
-        self.label_N1.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/na.png'))
+        self.label_N1.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/n1.png'))
         self.label_N2.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/n2.png'))
         self.label_N3.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/n3.png'))
         self.label_N4.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/n4.png'))
@@ -676,6 +676,19 @@ class Ui_MainWindow():
         self.visible_raws.clear()
         self.invisible_raws.clear()
         self.progress()
+        t = QTransform().rotate(30)
+        # self.pixmap = (QPixmap(QImage(self.current_game.path + '/a.png')).transformed(t))
+        # self.pixmap.save(self.current_game.path+'/a.png')
+        self.pixmap = (QPixmap(QImage(self.current_game.path + '/b.png')).transformed(t))
+        self.pixmap.save(self.current_game.path + '/b.png')
+        self.pixmap = (QPixmap(QImage(self.current_game.path + '/c.png')).transformed(t))
+        self.pixmap.save(self.current_game.path + '/c.png')
+        self.pixmap = (QPixmap(QImage(self.current_game.path + '/d.png')).transformed(QTransform().rotate(-30)))
+        self.pixmap.save(self.current_game.path + '/d.png')
+        self.pixmap = (QPixmap(QImage(self.current_game.path + '/e.png')).transformed(t))
+        self.pixmap.save(self.current_game.path + '/e.png')
+        self.pixmap = (QPixmap(QImage(self.current_game.path + '/f.png')).transformed(t))
+        self.pixmap.save(self.current_game.path + '/f.png')
 
     def show_current_raws(self):
         for elem in self.visible_raws:
