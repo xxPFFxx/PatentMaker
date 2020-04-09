@@ -904,6 +904,7 @@ class Deletable_Draggable_DroppableLabel(QtWidgets.QLabel):
             ui.show_current_raws()
             ui.progress()
 
+
             # ui.frame_progress.move(event.pos())
             # ui.frame_progress.raise_()
             # вариант решения без глобал переменных, но там чето много контролить надо, проблема осталась тут с дропом делдрагдроп на обычный патент, можешь ознакомиться
