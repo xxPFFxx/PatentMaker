@@ -377,7 +377,7 @@ class Ui_MainWindow():
         self.label_D.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/d.png'))
         self.label_E.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/e.png'))
         self.label_F.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/f.png'))
-        self.label_N1.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/na.png'))
+        self.label_N1.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/n1.png'))
         self.label_N2.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/n2.png'))
         self.label_N3.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/n3.png'))
         self.label_N4.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/n4.png'))
@@ -473,7 +473,8 @@ class Ui_MainWindow():
         msg.setWindowTitle('Time is over!')
         msg.setText('Время закончилось! Патентная палата закрывается, но вы можете продлить время её работы еще на '
                     '10 минут. \nYes - Добавить 10 минут. \nReset - Удалить все наработки. \n'
-                    'Ignore - Установить безлимитное время разработки.\n\nПримечание:\nПри возникновении неполадок в работе программы требуется нажать "Enter"')
+                    'Ignore - Установить безлимитное время разработки.\n\nПримечание:\nПри возникновении неполадок в '
+                    'работе программы требуется нажать "Enter"')
         msg.setIcon(QMessageBox.Warning)
         msg.setStandardButtons(QMessageBox.Yes | QMessageBox.Reset | QMessageBox.Ignore)
         msg.setDetailedText('При выборе безлимитного времени в правом верхнем углу появится текущее время. Чтобы '
@@ -676,6 +677,19 @@ class Ui_MainWindow():
         self.visible_raws.clear()
         self.invisible_raws.clear()
         self.progress()
+        t = QTransform().rotate(30)
+        # self.pixmap = (QPixmap(QImage(self.current_game.path + '/a.png')).transformed(t))
+        # self.pixmap.save(self.current_game.path+'/a.png')
+        self.pixmap = (QPixmap(QImage(self.current_game.path + '/b.png')).transformed(t))
+        self.pixmap.save(self.current_game.path + '/b.png')
+        self.pixmap = (QPixmap(QImage(self.current_game.path + '/c.png')).transformed(t))
+        self.pixmap.save(self.current_game.path + '/c.png')
+        self.pixmap = (QPixmap(QImage(self.current_game.path + '/d.png')).transformed(QTransform().rotate(-30)))
+        self.pixmap.save(self.current_game.path + '/d.png')
+        self.pixmap = (QPixmap(QImage(self.current_game.path + '/e.png')).transformed(t))
+        self.pixmap.save(self.current_game.path + '/e.png')
+        self.pixmap = (QPixmap(QImage(self.current_game.path + '/f.png')).transformed(t))
+        self.pixmap.save(self.current_game.path + '/f.png')
 
     def show_current_raws(self):
         for elem in self.visible_raws:
@@ -820,6 +834,7 @@ class Deletable_Draggable_DroppableLabel(QtWidgets.QLabel):
             n = ui.visible_raws.index(self)
             ui.invisible_raws.append(ui.visible_raws[n])
             ui.visible_raws.pop(n).setParent(None)
+            ui.progressBar.setValue(int(2 * len(ui.visible_raws) / ui.current_required_level * 100))
         if QMouseEvent.button() == Qt.LeftButton:
             global drag_start_position
             drag_start_position = QMouseEvent.pos()
