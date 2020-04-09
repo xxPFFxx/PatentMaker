@@ -937,5 +937,6 @@ if __name__ == "__main__":
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
+    #lala
 
 #где-то глубоко возможно есть баг связанный с переходом времени через 0:00
