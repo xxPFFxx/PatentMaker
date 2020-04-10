@@ -698,7 +698,7 @@ class Ui_MainWindow():
 
     def progress(self):
         try:
-            self.progressBar.setValue(int(2 * len(self.visible_raws) / self.current_required_level * 100))  # 2 * длину,
+            self.progressBar.setValue(int(len(self.visible_raws) / self.current_required_level * 100))  # 2 * длину,
         # т.к. каждая сыринка это 2 уровня обычно
         except ZeroDivisionError:
             msg = QMessageBox()
