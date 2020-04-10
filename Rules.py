@@ -12,3 +12,4 @@ class Window_rules(QWidget):
         self.label_rules.setGeometry(QtCore.QRect(10, 10, 720, 960))
         self.label_rules.setText("")
         self.label_rules.setPixmap(QtGui.QPixmap(game.path + '/rules.png'))
+        self.label_rules.setScaledContents(True)

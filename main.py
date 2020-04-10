@@ -216,7 +216,7 @@ class Ui_MainWindow():
         self.label_N1 = ClickableLabel(self.frame_raw_add)
         self.label_N1.setGeometry(QtCore.QRect(40, 40, 50, 87))
         self.label_N1.setText("")
-        self.label_N1.setPixmap(QtGui.QPixmap(self.current_game.path + '/na.png'))
+        self.label_N1.setPixmap(QtGui.QPixmap(self.current_game.path + '/n1.png'))
         self.label_N1.setScaledContents(True)
         self.label_N1.setObjectName("label_N1")
         self.label_N3 = ClickableLabel(self.frame_raw_add)
@@ -357,7 +357,7 @@ class Ui_MainWindow():
         self.patent.setGeometry(QtCore.QRect(0, 0, 721, 771))
         self.patent.setText("")
         self.patent.setPixmap(QtGui.QPixmap("patent.png"))
-        self.patent.setScaledContents(False)
+        self.patent.setScaledContents(True)
         self.patent.setOpenExternalLinks(False)
         self.patent.setObjectName("patent")
 
@@ -451,11 +451,11 @@ class Ui_MainWindow():
         self.actionPogU.setText(_translate("MainWindow", "PogU"))
 
     def __init__(self):
-        self.image_raw_main = QImage('a.png')  # Переменная для текущего изображения в выбранном сырье
-        self.angle = 0
         self.game1 = Game(1, 'Championat 28.02.2020', 'Easy')
         self.game2 = Game(2, "Training 27.02.2020", "Medium")
         self.current_game = self.game1
+        self.image_raw_main = QImage(self.current_game.path + '/a.png')  # Переменная для текущего изображения в выбранном сырье
+        self.angle = 0
         self.data = {self.game1.name: self.game1, self.game2.name: self.game2}
         self.visible_raws = []
         self.invisible_raws = []
@@ -677,19 +677,19 @@ class Ui_MainWindow():
         self.visible_raws.clear()
         self.invisible_raws.clear()
         self.progress()
-        t = QTransform().rotate(30)
-        # self.pixmap = (QPixmap(QImage(self.current_game.path + '/a.png')).transformed(t))
-        # self.pixmap.save(self.current_game.path+'/a.png')
-        self.pixmap = (QPixmap(QImage(self.current_game.path + '/b.png')).transformed(t))
-        self.pixmap.save(self.current_game.path + '/b.png')
-        self.pixmap = (QPixmap(QImage(self.current_game.path + '/c.png')).transformed(t))
-        self.pixmap.save(self.current_game.path + '/c.png')
-        self.pixmap = (QPixmap(QImage(self.current_game.path + '/d.png')).transformed(QTransform().rotate(-30)))
-        self.pixmap.save(self.current_game.path + '/d.png')
-        self.pixmap = (QPixmap(QImage(self.current_game.path + '/e.png')).transformed(t))
-        self.pixmap.save(self.current_game.path + '/e.png')
-        self.pixmap = (QPixmap(QImage(self.current_game.path + '/f.png')).transformed(t))
-        self.pixmap.save(self.current_game.path + '/f.png')
+        # t = QTransform().rotate(30)
+        # # self.pixmap = (QPixmap(QImage(self.current_game.path + '/a.png')).transformed(t))
+        # # self.pixmap.save(self.current_game.path+'/a.png')
+        # self.pixmap = (QPixmap(QImage(self.current_game.path + '/b.png')).transformed(t))
+        # self.pixmap.save(self.current_game.path + '/b.png')
+        # self.pixmap = (QPixmap(QImage(self.current_game.path + '/c.png')).transformed(t))
+        # self.pixmap.save(self.current_game.path + '/c.png')
+        # self.pixmap = (QPixmap(QImage(self.current_game.path + '/d.png')).transformed(QTransform().rotate(-30)))
+        # self.pixmap.save(self.current_game.path + '/d.png')
+        # self.pixmap = (QPixmap(QImage(self.current_game.path + '/e.png')).transformed(t))
+        # self.pixmap.save(self.current_game.path + '/e.png')
+        # self.pixmap = (QPixmap(QImage(self.current_game.path + '/f.png')).transformed(t))
+        # self.pixmap.save(self.current_game.path + '/f.png')
 
     def show_current_raws(self):
         for elem in self.visible_raws:
