@@ -451,8 +451,8 @@ class Ui_MainWindow():
         self.actionPogU.setText(_translate("MainWindow", "PogU"))
 
     def __init__(self):
-        self.game1 = Game(1, 'Championat 28.02.2020', 'Easy')
-        self.game2 = Game(2, "Training 27.02.2020", "Medium")
+        self.game1 = Game(1, 'Training 07.02.2020', 'Medium')
+        self.game2 = Game(2, "Training 27.02.2020", "Easy")
         self.current_game = self.game1
         self.image_raw_main = QImage(self.current_game.path + '/a.png')  # Переменная для текущего изображения в выбранном сырье
         self.angle = 0
