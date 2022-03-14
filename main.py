@@ -19,7 +19,7 @@ from PyQt5.QtCore import QMimeData, Qt, QRect, QTimer, QTime
 class Ui_MainWindow():
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1340, 900)
+        MainWindow.resize(1340, 950)
         MainWindow.setDocumentMode(False)
         MainWindow.setDockNestingEnabled(False)
         MainWindow.setUnifiedTitleAndToolBarOnMac(False)
@@ -56,6 +56,10 @@ class Ui_MainWindow():
         font.setPointSize(12)
         self.patentbox.setFont(font)
         self.patentbox.setObjectName("patentbox")
+        self.patentbox.addItem("")
+        self.patentbox.addItem("")
+        self.patentbox.addItem("")
+        self.patentbox.addItem("")
         self.patentbox.addItem("")
         self.patentbox.addItem("")
         self.frame_lvl = QtWidgets.QFrame(self.centralwidget)
@@ -237,18 +241,18 @@ class Ui_MainWindow():
         self.label_N4.setPixmap(QtGui.QPixmap(self.current_game.path + '/n4.png'))
         self.label_N4.setScaledContents(True)
         self.label_N4.setObjectName("label_N4")
-        # self.label_N5 = ClickableLabel(self.frame_raw_add)
-        # self.label_N5.setGeometry(QtCore.QRect(40, 220, 50, 87))
-        # self.label_N5.setText("")
-        # self.label_N5.setPixmap(QtGui.QPixmap(self.current_game.path + '/n5.png'))
-        # self.label_N5.setScaledContents(True)
-        # self.label_N5.setObjectName("label_N5")
-        # self.label_N6 = ClickableLabel(self.frame_raw_add)
-        # self.label_N6.setGeometry(QtCore.QRect(150, 220, 50, 87))
-        # self.label_N6.setText("")
-        # self.label_N6.setPixmap(QtGui.QPixmap(self.current_game.path + '/n6.png'))
-        # self.label_N6.setScaledContents(True)
-        # self.label_N6.setObjectName("label_N6")
+        self.label_N5 = ClickableLabel(self.frame_raw_add)
+        self.label_N5.setGeometry(QtCore.QRect(40, 220, 50, 87))
+        self.label_N5.setText("")
+        self.label_N5.setPixmap(QtGui.QPixmap(self.current_game.path + '/n5.png'))
+        self.label_N5.setScaledContents(True)
+        self.label_N5.setObjectName("label_N5")
+        self.label_N6 = ClickableLabel(self.frame_raw_add)
+        self.label_N6.setGeometry(QtCore.QRect(150, 220, 50, 87))
+        self.label_N6.setText("")
+        self.label_N6.setPixmap(QtGui.QPixmap(self.current_game.path + '/n6.png'))
+        self.label_N6.setScaledContents(True)
+        self.label_N6.setObjectName("label_N6")
         self.label_add = QtWidgets.QLabel(self.frame_raw_add)
         self.label_add.setGeometry(QtCore.QRect(80, 0, 261, 31))
         font = QtGui.QFont()
@@ -371,18 +375,18 @@ class Ui_MainWindow():
         self.label_raw_main.setObjectName("label_raw_main")
 
         # Обновление выбранного сырья при нажатии
-        self.label_A.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/a.png'))
-        self.label_B.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/b.png'))
-        self.label_C.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/c.png'))
-        self.label_D.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/d.png'))
-        self.label_E.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/e.png'))
-        self.label_F.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/f.png'))
-        self.label_N1.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/n1.png'))
-        self.label_N2.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/n2.png'))
-        self.label_N3.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/n3.png'))
-        self.label_N4.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/n4.png'))
-        # self.label_N5.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/n5.png'))
-        # self.label_N6.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/n6.png'))
+        self.label_A.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/a.png', 'a'))
+        self.label_B.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/b.png', 'b'))
+        self.label_C.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/c.png', 'c'))
+        self.label_D.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/d.png', 'd'))
+        self.label_E.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/e.png', 'e'))
+        self.label_F.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/f.png', 'f'))
+        self.label_N1.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/n1.png', 'n1'))
+        self.label_N2.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/n2.png', 'n2'))
+        self.label_N3.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/n3.png', 'n3'))
+        self.label_N4.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/n4.png', 'n4'))
+        self.label_N5.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/n5.png', 'n5'))
+        self.label_N6.clicked.connect(lambda: self.update_raw_main_image(self.current_game.path + '/n6.png', 'n6'))
 
 
 
@@ -417,8 +421,12 @@ class Ui_MainWindow():
         self.button_clear.setText(_translate("MainWindow", "Clear"))
         self.button_undo.setText(_translate("MainWindow", "Undo ↶"))
         self.button_redo.setText(_translate("MainWindow", "Redo ↷"))
-        self.patentbox.setItemText(0, _translate("MainWindow", self.game1.name))
-        self.patentbox.setItemText(1, _translate("MainWindow", self.game2.name))
+        self.patentbox.setItemText(0, _translate("MainWindow", self.game0.name))
+        self.patentbox.setItemText(1, _translate("MainWindow", self.game1.name))
+        self.patentbox.setItemText(2, _translate("MainWindow", self.game2.name))
+        self.patentbox.setItemText(3, _translate("MainWindow", self.game3.name))
+        self.patentbox.setItemText(4, _translate("MainWindow", self.game4.name))
+        self.patentbox.setItemText(5, _translate("MainWindow", self.game5.name))
         self.label_lvl.setText(_translate("MainWindow", "Required level"))
         self.name_patent.setText(_translate("MainWindow", self.current_game.name))
         self.label_difficulty.setText(_translate("MainWindow", "Difficulty: " + self.current_game.difficulty))
@@ -450,13 +458,20 @@ class Ui_MainWindow():
         self.actionMade_by.setText(_translate("MainWindow", "Creators"))
         self.actionPogU.setText(_translate("MainWindow", "PogU"))
 
+
     def __init__(self):
-        self.game1 = Game(1, 'Training 07.02.2020', 'Medium')
-        self.game2 = Game(2, "Training 27.02.2020", "Easy")
+        self.game0 = Game(0, [], (), (), '#0', 'Super Easy')
+        self.game1 = Game(1, [], (), (), '#1', 'Easy')
+        self.game2 = Game(2, [], (), (), "#2", "Easy")
+        self.game3 = Game(3, ['n1', 'n2'], (30, -5 , 224, 215), (75, 40, 150, 176), "#3", "Medium")
+        self.game4 = Game(4, ['n1', 'n2'], (-20, -45, 250, 260), (75, 40, 205, 176), "#4", "Hard")
+        self.game5 = Game(5, [], (), (), "#5", "Medium")
         self.current_game = self.game1
         self.image_raw_main = QImage(self.current_game.path + '/a.png')  # Переменная для текущего изображения в выбранном сырье
+        self.name_image = 'a'
         self.angle = 0
-        self.data = {self.game1.name: self.game1, self.game2.name: self.game2}
+        self.data = {self.game0.name: self.game0, self.game1.name: self.game1, self.game2.name: self.game2,
+                     self.game3.name: self.game3, self.game4.name: self.game4, self.game5.name: self.game5}
         self.visible_raws = []
         self.invisible_raws = []
         self.flag_clear = False
@@ -564,11 +579,44 @@ class Ui_MainWindow():
         t = QTransform().rotate(self.angle)
         self.label_raw_main.setPixmap(QPixmap(self.image_raw_main).transformed(t))
         if self.angle % 180 == 60:
-            self.label_raw_main.setGeometry(QtCore.QRect(30, 40, 210, 176))
+            if len(self.current_game.uniq) != 0:
+                find = False
+                for el in self.current_game.uniq:
+                    if self.name_image == el:
+                        k = self.current_game.numbers60
+                        find = True
+                if find == True:
+                    self.label_raw_main.setGeometry(QtCore.QRect(k[0], k[1], k[2], k[3]))
+                else:
+                    self.label_raw_main.setGeometry(QtCore.QRect(30, 40, 210, 176))  # 30 40 210 176
+            else:
+                self.label_raw_main.setGeometry(QtCore.QRect(30, 40, 210, 176))
         elif self.angle % 180 == 120:
-            self.label_raw_main.setGeometry(QtCore.QRect(30, 40, 210, 176))
+            if len(self.current_game.uniq) != 0:
+                find = False
+                for el in self.current_game.uniq:
+                    if self.name_image == el:
+                        k = self.current_game.numbers60
+                        find = True
+                if find:
+                    self.label_raw_main.setGeometry(QtCore.QRect(k[0], k[1], k[2], k[3]))
+                else:
+                    self.label_raw_main.setGeometry(QtCore.QRect(30, 40, 210, 176))  # 30 40 210 176
+            else:
+                self.label_raw_main.setGeometry(QtCore.QRect(30, 40, 210, 176))
         else:
-            self.label_raw_main.setGeometry(QtCore.QRect(75, 40, 105, 176))
+            if len(self.current_game.uniq) != 0:
+                find = False
+                for el in self.current_game.uniq:
+                    if self.name_image == el:
+                        k = self.current_game.numbers180
+                        find = True
+                if find == True:
+                    self.label_raw_main.setGeometry(QtCore.QRect(k[0], k[1], k[2], k[3]))
+                else:
+                    self.label_raw_main.setGeometry(QtCore.QRect(75, 40, 105, 176))  # 30 40 210 176
+            else:
+                self.label_raw_main.setGeometry(QtCore.QRect(75, 40, 105, 176))
         # self.image_raw_main = QPixmap(self.image_raw_main).transformed(t)
         # if (self.angle - 90) % 180 == 0:
         #     self.label_raw_main.setGeometry(QtCore.QRect(75, 60, 87, 50))
@@ -580,13 +628,46 @@ class Ui_MainWindow():
     def turn_left(self):
         self.angle -= 60
         t = QTransform().rotate(self.angle)
-        if self.angle % 180 == 60:
-            self.label_raw_main.setGeometry(QtCore.QRect(30, 40, 210, 176))
-        elif self.angle % 180 == 120:
-            self.label_raw_main.setGeometry(QtCore.QRect(30, 40, 210, 176))
-        else:
-            self.label_raw_main.setGeometry(QtCore.QRect(75, 40, 105, 176))
         self.label_raw_main.setPixmap(QPixmap(self.image_raw_main).transformed(t))
+        if self.angle % 180 == 60:
+            if len(self.current_game.uniq) != 0:
+                find = False
+                for el in self.current_game.uniq:
+                    if self.name_image == el:
+                        k = self.current_game.numbers60
+                        find = True
+                if find == True:
+                    self.label_raw_main.setGeometry(QtCore.QRect(k[0], k[1], k[2], k[3]))
+                else:
+                    self.label_raw_main.setGeometry(QtCore.QRect(30, 40, 210, 176))  # 30 40 210 176
+            else:
+                self.label_raw_main.setGeometry(QtCore.QRect(30, 40, 210, 176))
+        elif self.angle % 180 == 120:
+            if len(self.current_game.uniq) != 0:
+                find = False
+                for el in self.current_game.uniq:
+                    if self.name_image == el:
+                        k = self.current_game.numbers60
+                        find = True
+                if find == True:
+                    self.label_raw_main.setGeometry(QtCore.QRect(k[0], k[1], k[2], k[3]))
+                else:
+                    self.label_raw_main.setGeometry(QtCore.QRect(30, 40, 210, 176))  # 30 40 210 176
+            else:
+                self.label_raw_main.setGeometry(QtCore.QRect(30, 40, 210, 176))
+        else:
+            if len(self.current_game.uniq) != 0:
+                find = False
+                for el in self.current_game.uniq:
+                    if self.name_image == el:
+                        k = self.current_game.numbers180
+                        find = True
+                if find == True:
+                    self.label_raw_main.setGeometry(QtCore.QRect(k[0], k[1], k[2], k[3]))
+                else:
+                    self.label_raw_main.setGeometry(QtCore.QRect(75, 40, 105, 176))  # 30 40 210 176
+            else:
+                self.label_raw_main.setGeometry(QtCore.QRect(75, 40, 105, 176))
 
 
 
@@ -598,10 +679,15 @@ class Ui_MainWindow():
         # self.label_raw_main.setPixmap(self.image_raw_main)
 
     # Обновление изображения выбранного сырья
-    def update_raw_main_image(self, path):
+    def update_raw_main_image(self, path, name_image):
         self.image_raw_main = QImage(path)
+        self.name_image = name_image
         self.label_raw_main.setPixmap(QPixmap(self.image_raw_main))
-        self.label_raw_main.setGeometry(QtCore.QRect(75, 40, 105, 176))
+        if self.name_image in self.current_game.uniq:
+            k = self.current_game.numbers180
+            self.label_raw_main.setGeometry(QtCore.QRect(k[0], k[1], k[2], k[3]))
+        else:
+            self.label_raw_main.setGeometry(QtCore.QRect(75, 40, 105, 176))
         self.angle = 0
 
     # Показ окна правил
@@ -627,8 +713,9 @@ class Ui_MainWindow():
         self.label_N2.setPixmap(QPixmap(QImage(self.current_game.path + '/n2.png')))
         self.label_N3.setPixmap(QPixmap(QImage(self.current_game.path + '/n3.png')))
         self.label_N4.setPixmap(QPixmap(QImage(self.current_game.path + '/n4.png')))
-        # self.label_N5.setPixmap(QPixmap(QImage(self.current_game.path + '/n5.png')))
-        # self.label_N6.setPixmap(QPixmap(QImage(self.current_game.path + '/n6.png')))
+        self.label_N5.setPixmap(QPixmap(QImage(self.current_game.path + '/n5.png')))
+        self.label_N6.setPixmap(QPixmap(QImage(self.current_game.path + '/n6.png')))
+        self.update_raw_main_image(self.current_game.path + '/a.png', 'a')
         self.clear_action()
         # start time
         self.time_start = QTime.currentTime()

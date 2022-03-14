@@ -1,5 +1,8 @@
 class Game():
-    def __init__(self, number, name, difficulty):
+    def __init__(self, number, uniq, numbers60, numbers180, name, difficulty):
+        self.uniq = uniq
+        self.numbers60 = numbers60
+        self.numbers180 = numbers180
         self.name = name
         self.difficulty = difficulty
         self.number = number
