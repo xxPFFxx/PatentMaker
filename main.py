@@ -465,7 +465,7 @@ class Ui_MainWindow():
         self.game2 = Game(2, [], (), (), "#2", "Easy")
         self.game3 = Game(3, ['n1', 'n2'], (30, -5 , 224, 215), (75, 40, 150, 176), "#3", "Medium")
         self.game4 = Game(4, ['n1', 'n2'], (-20, -45, 250, 260), (75, 40, 205, 176), "#4", "Hard")
-        self.game5 = Game(5, [], (), (), "#5", "Medium")
+        self.game5 = Game(5, ['n5', 'n6'], (30, -5 , 224, 215), (75, 40, 150, 176), "#5", "Medium")
         self.current_game = self.game1
         self.image_raw_main = QImage(self.current_game.path + '/a.png')  # Переменная для текущего изображения в выбранном сырье
         self.name_image = 'a'
