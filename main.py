@@ -62,6 +62,7 @@ class Ui_MainWindow():
         self.patentbox.addItem("")
         self.patentbox.addItem("")
         self.patentbox.addItem("")
+        self.patentbox.addItem("")
         self.frame_lvl = QtWidgets.QFrame(self.centralwidget)
         self.frame_lvl.setGeometry(QtCore.QRect(210, 80, 101, 81))
         self.frame_lvl.setFrameShape(QtWidgets.QFrame.StyledPanel)
@@ -427,6 +428,7 @@ class Ui_MainWindow():
         self.patentbox.setItemText(3, _translate("MainWindow", self.game3.name))
         self.patentbox.setItemText(4, _translate("MainWindow", self.game4.name))
         self.patentbox.setItemText(5, _translate("MainWindow", self.game5.name))
+        self.patentbox.setItemText(6, _translate("MainWindow", self.game6.name))
         self.label_lvl.setText(_translate("MainWindow", "Required level"))
         self.name_patent.setText(_translate("MainWindow", self.current_game.name))
         self.label_difficulty.setText(_translate("MainWindow", "Difficulty: " + self.current_game.difficulty))
@@ -463,15 +465,17 @@ class Ui_MainWindow():
         self.game0 = Game(0, [], (), (), '#0', 'Super Easy')
         self.game1 = Game(1, [], (), (), '#1', 'Easy')
         self.game2 = Game(2, [], (), (), "#2", "Easy")
-        self.game3 = Game(3, ['n1', 'n2'], (30, -5 , 224, 215), (75, 40, 150, 176), "#3", "Medium")
+        self.game3 = Game(3, ['n1', 'n2'], (30, -5, 224, 215), (75, 40, 150, 176), "#3", "Medium")
         self.game4 = Game(4, ['n1', 'n2'], (-20, -45, 250, 260), (75, 40, 205, 176), "#4", "Hard")
-        self.game5 = Game(5, ['n5', 'n6'], (30, -5 , 224, 215), (75, 40, 150, 176), "#5", "Medium")
+        self.game5 = Game(5, ['n5', 'n6'], (30, -5, 224, 215), (75, 40, 150, 176), "#5", "Medium")
+        self.game6 = Game(6, ['n1', 'n2'], (30, -5, 224, 215), (75, 40, 150, 176), "#6", "Hard")
         self.current_game = self.game1
         self.image_raw_main = QImage(self.current_game.path + '/a.png')  # Переменная для текущего изображения в выбранном сырье
         self.name_image = 'a'
         self.angle = 0
         self.data = {self.game0.name: self.game0, self.game1.name: self.game1, self.game2.name: self.game2,
-                     self.game3.name: self.game3, self.game4.name: self.game4, self.game5.name: self.game5}
+                     self.game3.name: self.game3, self.game4.name: self.game4, self.game5.name: self.game5,
+                     self.game6.name: self.game6}
         self.visible_raws = []
         self.invisible_raws = []
         self.flag_clear = False
